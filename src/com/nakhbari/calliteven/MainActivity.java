@@ -76,6 +76,7 @@ public class MainActivity extends ActionBarActivity implements
 	public void UpdateEntryListFragment(int namePosition) {
 		entryListFragment.SetData(namePosition, m_nameEntry.get(namePosition)
 				.getEntryArray());
+		CalculateBalance(namePosition);
 
 	}
 
@@ -102,6 +103,22 @@ public class MainActivity extends ActionBarActivity implements
 	public void SendNewEntryData(int position, EntryListItem item) {
 		m_nameEntry.get(position).getEntryArray().add(item);
 		UpdateEntryListFragment(position);
+
+	}
+
+	/** ----------------------------- Functions ------------------------------ */
+	private void CalculateBalance(int namePosition) {
+		if (m_nameEntry.get(namePosition).getEntryArray().size() != 0) {
+			int balanceSum = 0;
+
+			for (int i = 0; i < m_nameEntry.get(namePosition).getEntryArray()
+					.size(); i++) {
+				balanceSum += m_nameEntry.get(namePosition).getEntryArray()
+						.get(i).getPrice();
+			}
+
+			m_nameEntry.get(namePosition).setBalance(balanceSum);
+		}
 
 	}
 }
