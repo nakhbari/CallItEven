@@ -2,6 +2,7 @@ package com.nakhbari.calliteven;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -59,7 +60,7 @@ public class EntryListAdapter extends ArrayAdapter<EntryListItem> {
 			TextView price = (TextView) view.findViewById(R.id.entryPrice);
 			TextView date = (TextView) view.findViewById(R.id.entryDate);
 
-			DateFormat dateFormat = entryItem.getDateFormat();
+			DateFormat dateFormat = DateFormat.getDateInstance();
 			
 			// Check to see if each individual name is null
 			if (title != null) {
@@ -72,7 +73,7 @@ public class EntryListAdapter extends ArrayAdapter<EntryListItem> {
 			}
 			
 			if (date != null) {
-				date.setText(dateFormat.format(entryItem.getDate()).toString());
+				date.setText((dateFormat.format(entryItem.getDate()).toString()));
 
 			}
 

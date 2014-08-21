@@ -69,7 +69,7 @@ public class EntryListFragment extends ListFragment {
 		namePosition = position;
 		m_entries.clear();
 		m_entries.addAll(array);
-		if (m_entries.size() != 0) {
+		if (m_entries.size() != 0 && ((ArrayAdapter<EntryListItem>) getListAdapter()) != null) {
 
 			((ArrayAdapter<EntryListItem>) getListAdapter())
 					.notifyDataSetChanged();

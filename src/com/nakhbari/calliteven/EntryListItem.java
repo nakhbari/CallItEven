@@ -1,7 +1,5 @@
 package com.nakhbari.calliteven;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class EntryListItem {
@@ -9,13 +7,11 @@ public class EntryListItem {
 	private String title;
 	private int price;
 	private Date date;
-	private DateFormat dateFormat;
 
 	public EntryListItem() {
 		this.title = "default";
 		this.price = 0;
 		this.date = new Date();
-		this.dateFormat = SimpleDateFormat.getDateInstance();
 	}
 
 	public String getTitle() {
@@ -28,10 +24,6 @@ public class EntryListItem {
 
 	public Date getDate() {
 		return date;
-	}
-
-	public DateFormat getDateFormat() {
-		return dateFormat;
 	}
 
 	public void setTitle(String name) {

@@ -1,13 +1,12 @@
 package com.nakhbari.calliteven;
 
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
 import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity implements
@@ -28,17 +27,33 @@ public class MainActivity extends ActionBarActivity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		// to give support on lower android version, we are not calling
-		// getFragmentManager()
-
+		
 		if (savedInstanceState == null) {
 			ft.add(R.id.idFragment, nameListFragment, "name_list_tag");
 			ft.commit();
 		}
+		
+
+	}
+
+
+	@Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		LoadDataStructure();
+	}
+
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		SaveDataStructure();
 	}
 
 	/** ----------------------- NameListFragment Functions ----------------- */
-	public void UpdateNameListFragment() {
+	private void UpdateNameListFragment() {
 		nameListFragment.SetNameListFragment(m_nameEntry);
 
 	}
@@ -46,8 +61,6 @@ public class MainActivity extends ActionBarActivity implements
 	/** ----------------------- NameListFragment Callbacks ----------------- */
 	@Override
 	public void AddNewNameEntryClicked() {
-		Toast.makeText(getApplicationContext(), "Add new name entry click",
-				Toast.LENGTH_SHORT).show();
 		NameDialogFragment newDialogFragment = new NameDialogFragment();
 		newDialogFragment.SetNameListItem(new NameListItem());
 		newDialogFragment.show(fm, "NameDialog");
@@ -55,12 +68,12 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public void NameListItemClicked(int position) {
-		entryListFragment.SetData(position, m_nameEntry.get(position)
-				.getEntryArray());
-
 		FragmentTransaction ft = fm.beginTransaction();
 		ft.replace(R.id.idFragment, entryListFragment);
 		ft.addToBackStack(null).commit();
+		
+		entryListFragment.SetData(position, m_nameEntry.get(position)
+				.getEntryArray());
 
 	}
 
@@ -73,7 +86,7 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	/** ----------------------- EntryListFragment Functions ----------------- */
-	public void UpdateEntryListFragment(int namePosition) {
+	private void UpdateEntryListFragment(int namePosition) {
 		entryListFragment.SetData(namePosition, m_nameEntry.get(namePosition)
 				.getEntryArray());
 		CalculateBalance(namePosition);
@@ -83,8 +96,6 @@ public class MainActivity extends ActionBarActivity implements
 	/** ----------------------- EntryListFragment Callbacks ----------------- */
 	@Override
 	public void AddNewListEntryClicked(int namePosition) {
-		Toast.makeText(getApplicationContext(), "Add new list entry click",
-				Toast.LENGTH_SHORT).show();
 		EntryDialogFragment newDialogFragment = new EntryDialogFragment();
 		newDialogFragment.SetEntryListItem(namePosition, new EntryListItem());
 		newDialogFragment.show(fm, "EntryDialog");
@@ -120,5 +131,20 @@ public class MainActivity extends ActionBarActivity implements
 			m_nameEntry.get(namePosition).setBalance(balanceSum);
 		}
 
+	}
+
+	private void SaveDataStructure() {
+		InternalDataManager dataManager = new InternalDataManager();
+		dataManager.SaveData(m_nameEntry, this);
+
+
+	}
+
+	private void LoadDataStructure() {
+		InternalDataManager dataManager = new InternalDataManager();
+		m_nameEntry.clear();
+		m_nameEntry.addAll(dataManager.LoadData(this));
+		UpdateNameListFragment();
+			
 	}
 }
