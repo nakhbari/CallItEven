@@ -6,6 +6,11 @@
     <string name="action_settings">Settings</string>
     <string name="new_entry_item">Add New Entry</string>
     <string name="new_name_item">Add New Person</string>
-    <string name="no_balance">Your Friend is Even with You</string>
+    <string name="no_balance">You\'re EVEN</string>
+
+    <string-array name="who_paid_array">
+        <item>I Paid</item>
+        <item>They Paid</item>
+    </string-array>
 
 </resources>

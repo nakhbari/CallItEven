@@ -54,9 +54,9 @@ public class NameListAdapter extends ArrayAdapter<NameListItem> {
 
 		if (i != null) {
 
-			TextView name = (TextView) view.findViewById(R.id.text1);
-			TextView owesWho = (TextView) view.findViewById(R.id.text2);
-			TextView balance = (TextView) view.findViewById(R.id.text3);
+			TextView name = (TextView) view.findViewById(R.id.nameText);
+			TextView owesWho = (TextView) view.findViewById(R.id.owingText);
+			TextView balance = (TextView) view.findViewById(R.id.balanceText);
 
 			// Check to see if each individual name is null
 			if (name != null) {
@@ -69,12 +69,12 @@ public class NameListAdapter extends ArrayAdapter<NameListItem> {
 
 				if (i.getBalance() < 0) {
 					owesWho.setText("Is Owed: ");
-					balance.setText("$" + Integer.toString(Math.abs(i.getBalance())));
+					balance.setText("$" + Long.toString(Math.abs(i.getBalance())));
 
 				} else if (i.getBalance() > 0) {
 
 					owesWho.setText("Owes You: ");
-					balance.setText("$" + Integer.toString(Math.abs(i.getBalance())));
+					balance.setText("$" + Long.toString(Math.abs(i.getBalance())));
 
 				} else {
 

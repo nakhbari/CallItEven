@@ -1,6 +1,8 @@
 package com.nakhbari.calliteven;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import com.nakhbari.calliteven.R.anim;
 
@@ -98,6 +100,14 @@ public class MainActivity extends ActionBarActivity implements
 		// When the dialog returns, we must add the name to
 		// the structure and inform the name fragment
 		m_nameEntry.add(item);
+
+		// Sort the List Alphabetically
+		Collections.sort(m_nameEntry, new Comparator<NameListItem>() {
+			public int compare(NameListItem item1, NameListItem item2) {
+				return item1.getName().compareTo(item2.getName());
+			}
+		});
+
 		UpdateNameListFragment();
 
 	}
@@ -136,6 +146,16 @@ public class MainActivity extends ActionBarActivity implements
 	public void SendNewEntryData(int position, EntryListItem item) {
 		// Update the Entry Fragment with new data
 		m_nameEntry.get(position).getEntryArray().add(item);
+
+		// Sort the List by Dates
+		Collections.sort(m_nameEntry.get(position).getEntryArray(),
+				new Comparator<EntryListItem>() {
+					public int compare(EntryListItem item1, EntryListItem item2) {
+						return (item1.getCalendar().getTime().compareTo(item2
+								.getCalendar().getTime()));
+					}
+				});
+
 		UpdateEntryListFragment(position);
 
 	}

@@ -1,24 +1,55 @@
 package com.nakhbari.calliteven;
 
-import com.nakhbari.calliteven.NameDialogFragment.NameDialogCommunicator;
+import java.text.DateFormat;
+import java.util.Calendar;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.fourmob.datetimepicker.date.DatePickerDialog;
+import com.fourmob.datetimepicker.date.DatePickerDialog.OnDateSetListener;
 
 public class EntryDialogFragment extends DialogFragment implements
-		View.OnClickListener {
+		View.OnClickListener, OnDateSetListener {
+
+	private static long MAX_PRICE = 20000000;
+	private static long MIN_PRICE = 0;
 	
 	EntryDialogCommunicator activityCommunicator;
 	int namePosition = 0;
 	EntryListItem entryItem;
 	EditText etTitle;
 	EditText etPrice;
+	Button dateButton;
+	Spinner spWhoPaid;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setStyle(DialogFragment.STYLE_NO_TITLE, DialogFragment.STYLE_NORMAL);
+	}
+
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		int width = getResources().getDimensionPixelSize(
+				R.dimen.entry_list_dialog_width);
+		int height = getResources().getDimensionPixelSize(
+				R.dimen.entry_list_dialog_height);
+
+		getDialog().getWindow().setLayout(width, height);
+		super.onResume();
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -30,23 +61,27 @@ public class EntryDialogFragment extends DialogFragment implements
 		return view;
 	}
 
+	/** ----------------------- Functions -------------------------------------- */
+
 	private void initializeDialog(View view) {
 
 		etTitle = (EditText) view.findViewById(R.id.dialogEntryTitle);
 		etPrice = (EditText) view.findViewById(R.id.dialogEntryPrice);
-		// EditText etDate = (EditText) view.findViewById(R.id.dialogEntryDate);
+		etPrice.setFilters(new InputFilter[]{new InputFilterPriceNumber(MIN_PRICE, MAX_PRICE)});
+		spWhoPaid = (Spinner) view.findViewById(R.id.spWhoPaid);
 
 		// Set the edit texts within the Dialog, if the entry item is filled out
 		if (entryItem != null && etTitle != null && etPrice != null
 				&& !(entryItem.getTitle() == "default")
 				&& !(entryItem.getPrice() == 0)) {
 			etTitle.setText(entryItem.getTitle());
-			etPrice.setText(Integer.toString(entryItem.getPrice()));
+			etPrice.setText(Long.toString(entryItem.getPrice()));
 		}
 
 		// Find the yes and cancel buttons in the dialog
 		Button yesButton = (Button) view.findViewById(R.id.entryOK);
 		Button cancelButton = (Button) view.findViewById(R.id.entryCancel);
+		dateButton = (Button) view.findViewById(R.id.dialogEntryDate);
 
 		// Listen for clicks
 		if (yesButton != null) {
@@ -57,29 +92,86 @@ public class EntryDialogFragment extends DialogFragment implements
 
 			cancelButton.setOnClickListener(this);
 		}
+		if (dateButton != null) {
+
+			final Calendar calendar = Calendar.getInstance();
+			dateButton.setOnClickListener(this);
+			dateButton.setText(GetStringFromCalendar(calendar));
+		}
 
 	}
 
 	// Gets called when an item is clicked
 	@Override
 	public void onClick(View v) {
-		if (v.getId() == R.id.entryOK) {
+		switch (v.getId()) {
+		case R.id.entryOK:
 
-			// fill in the entrylistitem with the dialog data
-			entryItem.setTitle(etTitle.getText().toString().trim());
-			entryItem.setPrice(Integer.parseInt(etPrice.getText().toString()));
+			if (etTitle.getText().toString().length() == 0) {
+				Toast.makeText(getActivity(), "Enter Title", Toast.LENGTH_SHORT).show();
+			} else if (etPrice.getText().toString().length() == 0) {
 
-			// TODO: Manage the Date here
+				Toast.makeText(getActivity(), "Enter Price", Toast.LENGTH_SHORT).show();
+			} else {
+				// fill in the entrylistitem with the dialog data
+				entryItem.setTitle(etTitle.getText().toString().trim());
 
-			// Send data to the fragment
-			activityCommunicator.SendNewEntryData(namePosition, entryItem);
+				if (spWhoPaid.getSelectedItemPosition() == 0) {
 
+					entryItem.setPrice(Long.parseLong(etPrice.getText()
+							.toString()));
+
+				} else {
+					// Then the other person paid and we need to made the
+					// price negative
+					entryItem.setPrice((-1)
+							* Integer.parseInt(etPrice.getText().toString()));
+				}
+
+				// Send data to the fragment
+				activityCommunicator.SendNewEntryData(namePosition, entryItem);
+
+				dismiss();
+			}
+
+			break;
+		case R.id.entryCancel:
 			dismiss();
-		} else {
+			break;
 
-			dismiss();
+		case R.id.dialogEntryDate:
+
+			final Calendar calendar = Calendar.getInstance();
+			final DatePickerDialog datePickerDialog = DatePickerDialog
+					.newInstance(this, calendar.get(Calendar.YEAR),
+							calendar.get(Calendar.MONTH),
+							calendar.get(Calendar.DAY_OF_MONTH), false);
+			datePickerDialog.setYearRange(1985, 2028);
+			datePickerDialog.show(getFragmentManager(), "DatePicker");
+			break;
 		}
 
+	}
+
+	@Override
+	public void onDateSet(DatePickerDialog datePickerDialog, int year,
+			int month, int day) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(0);
+		cal.set(year, month, day);
+
+		entryItem.setCalendar(cal);
+
+		dateButton.setText(GetStringFromCalendar(cal));
+	}
+
+	private String GetStringFromCalendar(Calendar cal) {
+		String result = "";
+
+		DateFormat dateFormat = DateFormat.getDateInstance();
+
+		result = dateFormat.format(cal.getTime());
+		return result;
 	}
 
 	/** ----------------------- Activity Callbacks --------------------------- */
@@ -106,4 +198,5 @@ public class EntryDialogFragment extends DialogFragment implements
 	public interface EntryDialogCommunicator {
 		public void SendNewEntryData(int position, EntryListItem item);
 	}
+
 }

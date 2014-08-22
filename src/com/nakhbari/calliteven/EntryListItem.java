@@ -1,40 +1,40 @@
 package com.nakhbari.calliteven;
 
-import java.util.Date;
+import java.util.Calendar;
 
 public class EntryListItem {
-	
+
 	private String title;
-	private int price;
-	private Date date;
+	private long price;
+	private Calendar calendar;
 
 	public EntryListItem() {
 		this.title = "default";
 		this.price = 0;
-		this.date = new Date();
+		this.calendar = Calendar.getInstance();
 	}
 
 	public String getTitle() {
 		return title;
 	}
 
-	public int getPrice() {
+	public long getPrice() {
 		return price;
 	}
 
-	public Date getDate() {
-		return date;
+	public Calendar getCalendar() {
+		return calendar;
 	}
 
 	public void setTitle(String name) {
 		this.title = name;
 	}
 
-	public void setPrice(int price) {
+	public void setPrice(long price) {
 		this.price = price;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setCalendar(Calendar cal) {
+		this.calendar = cal;
 	}
 }

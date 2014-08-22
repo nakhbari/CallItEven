@@ -15,7 +15,7 @@ public class EntryListAdapter extends ArrayAdapter<EntryListItem> {
 
 	// List of names
 	private ArrayList<EntryListItem> m_rowEntries;
-
+	private String[] arrayWhoPaid;
 	/*
 	 * here we must override the constructor for ArrayAdapter the only variable
 	 * we care about now is ArrayList<Item> objects, because it is the list of
@@ -24,6 +24,7 @@ public class EntryListAdapter extends ArrayAdapter<EntryListItem> {
 	public EntryListAdapter(Context context, int textViewResourceId,
 			ArrayList<EntryListItem> rowEntries) {
 		super(context, textViewResourceId, rowEntries);
+		arrayWhoPaid = context.getResources().getStringArray(R.array.who_paid_array);
 		this.m_rowEntries = rowEntries;
 	}
 
@@ -59,21 +60,33 @@ public class EntryListAdapter extends ArrayAdapter<EntryListItem> {
 			TextView title = (TextView) view.findViewById(R.id.entryTitle);
 			TextView price = (TextView) view.findViewById(R.id.entryPrice);
 			TextView date = (TextView) view.findViewById(R.id.entryDate);
-
+			TextView whoPaid = (TextView) view.findViewById(R.id.tvWhoPaidEntry);
 			DateFormat dateFormat = DateFormat.getDateInstance();
-			
+
 			// Check to see if each individual name is null
 			if (title != null) {
 				title.setText(entryItem.getTitle());
 			}
 
 			if (price != null) {
-				price.setText(Integer.toString(entryItem.getPrice()));
+				if (entryItem.getPrice() >= 0)
+				{
+					whoPaid.setText(arrayWhoPaid[0]);
+				}
+				else
+				{
+
+					whoPaid.setText(arrayWhoPaid[1]);
+				}
+				
+
+				price.setText("$" + Long.toString(Math.abs(entryItem.getPrice())));
 
 			}
-			
+
 			if (date != null) {
-				date.setText((dateFormat.format(entryItem.getDate()).toString()));
+				date.setText((dateFormat.format(entryItem.getCalendar()
+						.getTime()).toString()));
 
 			}
 
@@ -84,4 +97,3 @@ public class EntryListAdapter extends ArrayAdapter<EntryListItem> {
 
 	}
 }
-
