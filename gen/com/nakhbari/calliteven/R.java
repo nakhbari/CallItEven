@@ -990,6 +990,8 @@ containing a value of this type.
          (the screen is in portrait). This may be either a fraction or a dimension.
          */
         public static final int dialog_fixed_width_minor=0x7f080012;
+        public static final int name_list_dialog_height=0x7f080018;
+        public static final int name_list_dialog_width=0x7f080017;
     }
     public static final class drawable {
         public static final int abc_ab_bottom_solid_dark_holo=0x7f020000;
@@ -1079,9 +1081,12 @@ containing a value of this type.
         public static final int abc_textfield_searchview_holo_light=0x7f020054;
         public static final int abc_textfield_searchview_right_holo_dark=0x7f020055;
         public static final int abc_textfield_searchview_right_holo_light=0x7f020056;
-        public static final int ic_action_add_person=0x7f020057;
-        public static final int ic_action_new_event=0x7f020058;
-        public static final int ic_launcher=0x7f020059;
+        public static final int custom_button_default=0x7f020057;
+        public static final int custom_button_pressed=0x7f020058;
+        public static final int custom_button_style=0x7f020059;
+        public static final int ic_action_add_person=0x7f02005a;
+        public static final int ic_action_new_event=0x7f02005b;
+        public static final int ic_launcher=0x7f02005c;
     }
     public static final class id {
         public static final int action_bar=0x7f05001c;
@@ -1100,6 +1105,7 @@ containing a value of this type.
         public static final int addEntryItem=0x7f05004b;
         public static final int addNameItem=0x7f05004c;
         public static final int always=0x7f05000b;
+        public static final int balanceText=0x7f05004a;
         public static final int beginning=0x7f050011;
         public static final int checkbox=0x7f05002d;
         public static final int collapseActionView=0x7f05000d;
@@ -1131,9 +1137,11 @@ containing a value of this type.
         public static final int middle=0x7f050012;
         public static final int nameCancel=0x7f050044;
         public static final int nameOK=0x7f050043;
+        public static final int nameText=0x7f050048;
         public static final int never=0x7f050009;
         public static final int none=0x7f050010;
         public static final int normal=0x7f050000;
+        public static final int owingText=0x7f050049;
         public static final int progress_circular=0x7f050018;
         public static final int progress_horizontal=0x7f050019;
         public static final int radio=0x7f05002f;
@@ -1154,9 +1162,6 @@ containing a value of this type.
         public static final int split_action_bar=0x7f05001e;
         public static final int submit_area=0x7f050039;
         public static final int tabMode=0x7f050002;
-        public static final int text1=0x7f050048;
-        public static final int text2=0x7f05004a;
-        public static final int text3=0x7f050049;
         public static final int title=0x7f05002b;
         public static final int top_action_bar=0x7f050020;
         public static final int up=0x7f050021;

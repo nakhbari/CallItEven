@@ -18,11 +18,31 @@ public class NameDialogFragment extends DialogFragment implements
 	EditText etName;
 	NameDialogCommunicator activityCommunicator;
 
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setStyle(DialogFragment.STYLE_NO_TITLE, DialogFragment.STYLE_NORMAL);
+	}
+
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		int width = getResources().getDimensionPixelSize(
+				R.dimen.name_list_dialog_width);
+		int height = getResources().getDimensionPixelSize(
+				R.dimen.name_list_dialog_height);
+
+		getDialog().getWindow().setLayout(width, height);
+		super.onResume();
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+
 		View view = inflater.inflate(R.layout.fragment_name_dialog, null);
+
 		initializeDialog(view);
 
 		return view;
@@ -59,14 +79,18 @@ public class NameDialogFragment extends DialogFragment implements
 
 		// Gets called when an item is clicked
 		if (v.getId() == R.id.nameOK) {
+			if (etName.getText().toString().length() > 0){
+				// fill in the namelistitem with the dialog data
+				nameListItem.setName(etName.getText().toString().trim());
 
-			// fill in the namelistitem with the dialog data
-			nameListItem.setName(etName.getText().toString().trim());
+				// Send data to the fragment
+				activityCommunicator.SendNewNameData(nameListItem);
 
-			// Send data to the fragment
-			activityCommunicator.SendNewNameData(nameListItem);
-
-			dismiss();
+				dismiss();
+			} else {
+				Toast.makeText(getActivity(), "Please enter a Name",
+						Toast.LENGTH_SHORT).show();
+			}
 		} else {
 
 			dismiss();
