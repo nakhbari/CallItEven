@@ -1,13 +1,11 @@
 package com.nakhbari.calliteven;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
-import com.nakhbari.calliteven.NameListFragment.NameListCommunicator;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.support.v4.app.NavUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 
 public class EntryListFragment extends ListFragment {
 	EntryListCommunicator activityCommunicator;
@@ -60,7 +57,16 @@ public class EntryListFragment extends ListFragment {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// This function will catch when the actionbar button have been clicked
-		activityCommunicator.AddNewListEntryClicked(namePosition);
+		switch (item.getItemId()) {
+
+		case R.id.addEntryItem:
+			activityCommunicator.AddNewListEntryClicked(namePosition);
+			break;
+		case android.R.id.home:
+			activityCommunicator.NavigateBackToHome();
+			break;
+		}
+
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -69,7 +75,9 @@ public class EntryListFragment extends ListFragment {
 		namePosition = position;
 		m_entries.clear();
 		m_entries.addAll(array);
-		if (m_entries.size() != 0 && ((ArrayAdapter<EntryListItem>) getListAdapter()) != null) {
+
+		if (m_entries.size() != 0
+				&& ((ArrayAdapter<EntryListItem>) getListAdapter()) != null) {
 
 			((ArrayAdapter<EntryListItem>) getListAdapter())
 					.notifyDataSetChanged();
@@ -93,7 +101,6 @@ public class EntryListFragment extends ListFragment {
 
 	public interface EntryListCommunicator {
 		public void AddNewListEntryClicked(int namePosition);
-
-		public void EntryListItemClicked(int position);
+		public void NavigateBackToHome();
 	}
 }

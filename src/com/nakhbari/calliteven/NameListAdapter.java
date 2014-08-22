@@ -63,6 +63,7 @@ public class NameListAdapter extends ArrayAdapter<NameListItem> {
 				name.setText(i.getName());
 			}
 
+			// Manage what happens with the balance
 			if (balance != null) {
 				
 
@@ -77,7 +78,7 @@ public class NameListAdapter extends ArrayAdapter<NameListItem> {
 
 				} else {
 
-					owesWho.setText("Is Even With You");
+					owesWho.setText(R.string.no_balance);
 					balance.setText("");
 				}
 			}

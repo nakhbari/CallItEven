@@ -858,10 +858,12 @@ containing a value of this type.
         public static final int abc_split_action_bar_is_narrow=0x7f060002;
     }
     public static final class color {
-        public static final int abc_search_url_text_holo=0x7f070003;
+        public static final int abc_search_url_text_holo=0x7f070005;
         public static final int abc_search_url_text_normal=0x7f070000;
         public static final int abc_search_url_text_pressed=0x7f070002;
         public static final int abc_search_url_text_selected=0x7f070001;
+        public static final int actionbar_background=0x7f070003;
+        public static final int actionbar_text_color=0x7f070004;
     }
     public static final class dimen {
         /**  Default height of an action bar. 
@@ -1153,8 +1155,8 @@ containing a value of this type.
         public static final int submit_area=0x7f050039;
         public static final int tabMode=0x7f050002;
         public static final int text1=0x7f050048;
-        public static final int text2=0x7f050049;
-        public static final int text3=0x7f05004a;
+        public static final int text2=0x7f05004a;
+        public static final int text3=0x7f050049;
         public static final int title=0x7f05002b;
         public static final int top_action_bar=0x7f050020;
         public static final int up=0x7f050021;
@@ -1271,16 +1273,21 @@ containing a value of this type.
         public static final int hello_world=0x7f0a000e;
         public static final int new_entry_item=0x7f0a0010;
         public static final int new_name_item=0x7f0a0011;
+        public static final int no_balance=0x7f0a0012;
     }
     public static final class style {
         /** 
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+
+
+
     
 
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
             backward-compatibility can go here.
+
         
 
         Base application theme for API 11+. This theme completely replaces
@@ -1296,9 +1303,11 @@ containing a value of this type.
          */
         public static final int AppBaseTheme=0x7f0b008b;
         /**  Application theme. 
- All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f0b008c;
+        /**  ActionBar styles 
+         */
+        public static final int MyActionBar=0x7f0b008d;
         /**  Mimic text appearance in select_dialog_item.xml 
          */
         public static final int TextAppearance_AppCompat_Base_CompactMenu_Dialog=0x7f0b0063;

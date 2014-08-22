@@ -1,13 +1,12 @@
 package com.nakhbari.calliteven;
 
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity implements
 		NameListFragment.NameListCommunicator,
@@ -27,33 +26,34 @@ public class MainActivity extends ActionBarActivity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		
 		if (savedInstanceState == null) {
 			ft.add(R.id.idFragment, nameListFragment, "name_list_tag");
 			ft.commit();
 		}
-		
+
+		// Turn off the up button initially
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(false);
 
 	}
 
-
 	@Override
 	protected void onStart() {
-		// TODO Auto-generated method stub
+		// Load the saved data on application start
 		super.onStart();
 		LoadDataStructure();
 	}
 
-
 	@Override
-	protected void onPause() {
-		// TODO Auto-generated method stub
-		super.onPause();
+	protected void onStop() {
+		// Save the data when the app Stops (before closing)
+		super.onStop();
 		SaveDataStructure();
 	}
 
 	/** ----------------------- NameListFragment Functions ----------------- */
 	private void UpdateNameListFragment() {
+		// Update the Name Fragment with the newly change name list
 		nameListFragment.SetNameListFragment(m_nameEntry);
 
 	}
@@ -61,25 +61,37 @@ public class MainActivity extends ActionBarActivity implements
 	/** ----------------------- NameListFragment Callbacks ----------------- */
 	@Override
 	public void AddNewNameEntryClicked() {
+		// Open Dialog so a new person can be added to the list
 		NameDialogFragment newDialogFragment = new NameDialogFragment();
+
+		// Do not populate the dialog, since it is a NEW entry
 		newDialogFragment.SetNameListItem(new NameListItem());
 		newDialogFragment.show(fm, "NameDialog");
 	}
 
 	@Override
 	public void NameListItemClicked(int position) {
+		// a Name was clicked, so move to the detail fragment
 		FragmentTransaction ft = fm.beginTransaction();
 		ft.replace(R.id.idFragment, entryListFragment);
 		ft.addToBackStack(null).commit();
-		
+
+		// Set the data in the detail fragment
 		entryListFragment.SetData(position, m_nameEntry.get(position)
 				.getEntryArray());
+
+		// Enable the up button on the action bar
+		// so the detail fragment can navigate back
+		final ActionBar actionBar = getSupportActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
 
 	}
 
 	/** ----------------------- NameDialogFragment Callbacks ----------------- */
 	@Override
 	public void SendNewNameData(NameListItem item) {
+		// When the dialog returns, we must add the name to
+		// the structure and inform the name fragment
 		m_nameEntry.add(item);
 		UpdateNameListFragment();
 
@@ -87,6 +99,8 @@ public class MainActivity extends ActionBarActivity implements
 
 	/** ----------------------- EntryListFragment Functions ----------------- */
 	private void UpdateEntryListFragment(int namePosition) {
+		// When the dialog returns, we must add the entry to
+		// the structure and inform the entry fragment
 		entryListFragment.SetData(namePosition, m_nameEntry.get(namePosition)
 				.getEntryArray());
 		CalculateBalance(namePosition);
@@ -96,6 +110,9 @@ public class MainActivity extends ActionBarActivity implements
 	/** ----------------------- EntryListFragment Callbacks ----------------- */
 	@Override
 	public void AddNewListEntryClicked(int namePosition) {
+		// The Add New entry actionbar item was clicked so we need
+		// to open the dialog which the user can put in the details
+		// of the new entry
 		EntryDialogFragment newDialogFragment = new EntryDialogFragment();
 		newDialogFragment.SetEntryListItem(namePosition, new EntryListItem());
 		newDialogFragment.show(fm, "EntryDialog");
@@ -103,15 +120,22 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	@Override
-	public void EntryListItemClicked(int position) {
-		// TODO Auto-generated method stub
-
+	public void NavigateBackToHome() {
+		// The details fragment up button has been hit to 
+		// come back home
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(false);
+		
+		// Pop back to the last fragment
+		fm.popBackStack();
 	}
+
 
 	/** ----------------------- EntryDialogFragment Callbacks ----------------- */
 
 	@Override
 	public void SendNewEntryData(int position, EntryListItem item) {
+		// Update the Entry Fragment with new data		
 		m_nameEntry.get(position).getEntryArray().add(item);
 		UpdateEntryListFragment(position);
 
@@ -119,6 +143,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	/** ----------------------------- Functions ------------------------------ */
 	private void CalculateBalance(int namePosition) {
+		// Calculate how much the person is owed, from the sum of entries
 		if (m_nameEntry.get(namePosition).getEntryArray().size() != 0) {
 			int balanceSum = 0;
 
@@ -137,7 +162,6 @@ public class MainActivity extends ActionBarActivity implements
 		InternalDataManager dataManager = new InternalDataManager();
 		dataManager.SaveData(m_nameEntry, this);
 
-
 	}
 
 	private void LoadDataStructure() {
@@ -145,6 +169,7 @@ public class MainActivity extends ActionBarActivity implements
 		m_nameEntry.clear();
 		m_nameEntry.addAll(dataManager.LoadData(this));
 		UpdateNameListFragment();
-			
+
 	}
+
 }

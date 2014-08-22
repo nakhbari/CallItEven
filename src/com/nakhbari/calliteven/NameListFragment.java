@@ -68,7 +68,12 @@ public class NameListFragment extends ListFragment {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// This function will catch when the actionbar button have been clicked
-		activityCommunicator.AddNewNameEntryClicked();
+
+		switch (item.getItemId()) {
+		case R.id.addNameItem:
+			activityCommunicator.AddNewNameEntryClicked();
+			break;
+		}
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -77,8 +82,7 @@ public class NameListFragment extends ListFragment {
 	public void SetNameListFragment(ArrayList<NameListItem> array) {
 		m_nameEntry.clear();
 		m_nameEntry.addAll(array);
-		if (m_nameEntry.size() != 0)
-		{
+		if (m_nameEntry.size() != 0) {
 
 			((ArrayAdapter<NameListItem>) getListAdapter())
 					.notifyDataSetChanged();
