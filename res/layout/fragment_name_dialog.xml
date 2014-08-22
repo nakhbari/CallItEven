@@ -8,12 +8,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:gravity="center"
         android:orientation="vertical" >
 
         <EditText
             android:id="@+id/dialogName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:layout_marginBottom="30dp"
             android:hint="Name" />
     </LinearLayout>
 
@@ -21,18 +24,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:gravity="center"
         android:orientation="horizontal" >
 
         <Button
             android:id="@+id/nameOK"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#00000000"
             android:text="OK" />
 
         <Button
             android:id="@+id/nameCancel"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#00000000"
             android:text="Cancel" />
     </LinearLayout>
 

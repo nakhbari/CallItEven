@@ -2,10 +2,10 @@ package com.nakhbari.calliteven;
 
 import java.util.ArrayList;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.support.v4.app.NavUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -68,6 +68,15 @@ public class EntryListFragment extends ListFragment {
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onPause() {
+
+		ActionBar actionBar = getActivity().getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(false);
+		
+		super.onPause();
 	}
 
 	/** ----------------------- Activity Functions ----------------- */

@@ -2,6 +2,8 @@ package com.nakhbari.calliteven;
 
 import java.util.ArrayList;
 
+import com.nakhbari.calliteven.R.anim;
+
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -73,6 +75,9 @@ public class MainActivity extends ActionBarActivity implements
 	public void NameListItemClicked(int position) {
 		// a Name was clicked, so move to the detail fragment
 		FragmentTransaction ft = fm.beginTransaction();
+
+		ft.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out,
+				R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_bottom);
 		ft.replace(R.id.idFragment, entryListFragment);
 		ft.addToBackStack(null).commit();
 
@@ -121,21 +126,15 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public void NavigateBackToHome() {
-		// The details fragment up button has been hit to 
-		// come back home
-		ActionBar actionBar = getSupportActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(false);
-		
 		// Pop back to the last fragment
 		fm.popBackStack();
 	}
-
 
 	/** ----------------------- EntryDialogFragment Callbacks ----------------- */
 
 	@Override
 	public void SendNewEntryData(int position, EntryListItem item) {
-		// Update the Entry Fragment with new data		
+		// Update the Entry Fragment with new data
 		m_nameEntry.get(position).getEntryArray().add(item);
 		UpdateEntryListFragment(position);
 
