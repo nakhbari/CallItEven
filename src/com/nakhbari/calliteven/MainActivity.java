@@ -78,14 +78,14 @@ public class MainActivity extends ActionBarActivity implements
 		// a Name was clicked, so move to the detail fragment
 		FragmentTransaction ft = fm.beginTransaction();
 
-		ft.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out,
-				R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_bottom);
+		ft.setCustomAnimations(R.animator.enter_from_right,
+				R.animator.exit_to_left, R.animator.enter_from_left,
+				R.animator.exit_to_right);
 		ft.replace(R.id.idFragment, entryListFragment);
 		ft.addToBackStack(null).commit();
 
 		// Set the data in the detail fragment
-		entryListFragment.SetData(position, m_nameEntry.get(position)
-				.getEntryArray());
+		UpdateEntryListFragment(position, false);
 
 		// Enable the up button on the action bar
 		// so the detail fragment can navigate back
@@ -113,14 +113,19 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	/** ----------------------- EntryListFragment Functions ----------------- */
-	private void UpdateEntryListFragment(int namePosition) {
+	private void UpdateEntryListFragment(int namePosition, boolean shouldCalculateBalance) {
 		// When the dialog returns, we must add the entry to
 		// the structure and inform the entry fragment
-		entryListFragment.SetData(namePosition, m_nameEntry.get(namePosition)
-				.getEntryArray());
-		CalculateBalance(namePosition);
+		entryListFragment.SetData(namePosition, m_nameEntry.get(namePosition).getEntryArray());
+		
+		if(shouldCalculateBalance)
+		{
+
+			CalculateBalance(namePosition);	
+		}
 
 	}
+
 
 	/** ----------------------- EntryListFragment Callbacks ----------------- */
 	@Override
@@ -156,7 +161,7 @@ public class MainActivity extends ActionBarActivity implements
 					}
 				});
 
-		UpdateEntryListFragment(position);
+		UpdateEntryListFragment(position, true);
 
 	}
 

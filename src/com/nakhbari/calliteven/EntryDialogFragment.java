@@ -23,7 +23,7 @@ public class EntryDialogFragment extends DialogFragment implements
 
 	private static long MAX_PRICE = 20000000;
 	private static long MIN_PRICE = 0;
-	
+
 	EntryDialogCommunicator activityCommunicator;
 	int namePosition = 0;
 	EntryListItem entryItem;
@@ -52,6 +52,20 @@ public class EntryDialogFragment extends DialogFragment implements
 	}
 
 	@Override
+	public void onStart() {
+		super.onStart();
+
+		// safety check
+		if (getDialog() == null) {
+			return;
+		}
+
+		// set the animations to use on showing and hiding the dialog
+		getDialog().getWindow().setWindowAnimations(
+				R.style.dialog_animation_fade);
+	}
+
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_entry_dialog, null);
@@ -67,7 +81,8 @@ public class EntryDialogFragment extends DialogFragment implements
 
 		etTitle = (EditText) view.findViewById(R.id.dialogEntryTitle);
 		etPrice = (EditText) view.findViewById(R.id.dialogEntryPrice);
-		etPrice.setFilters(new InputFilter[]{new InputFilterPriceNumber(MIN_PRICE, MAX_PRICE)});
+		etPrice.setFilters(new InputFilter[] { new InputFilterPriceNumber(
+				MIN_PRICE, MAX_PRICE) });
 		spWhoPaid = (Spinner) view.findViewById(R.id.spWhoPaid);
 
 		// Set the edit texts within the Dialog, if the entry item is filled out
@@ -108,10 +123,12 @@ public class EntryDialogFragment extends DialogFragment implements
 		case R.id.entryOK:
 
 			if (etTitle.getText().toString().length() == 0) {
-				Toast.makeText(getActivity(), "Enter Title", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getActivity(), "Enter Title", Toast.LENGTH_SHORT)
+						.show();
 			} else if (etPrice.getText().toString().length() == 0) {
 
-				Toast.makeText(getActivity(), "Enter Price", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getActivity(), "Enter Price", Toast.LENGTH_SHORT)
+						.show();
 			} else {
 				// fill in the entrylistitem with the dialog data
 				entryItem.setTitle(etTitle.getText().toString().trim());

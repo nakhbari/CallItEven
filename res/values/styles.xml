@@ -2,13 +2,13 @@
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
     <style name="AppBaseTheme" parent="Theme.AppCompat.Light">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
+            backward-compatibility can go here.
         -->
     </style>
 
@@ -22,6 +22,11 @@
     <!-- ActionBar styles -->
     <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@color/actionbar_background</item>
+    </style>
+
+    <style name="dialog_animation_fade">
+        <item name="android:windowEnterAnimation">@animator/fade_in_dialog</item>
+        <item name="android:windowExitAnimation">@animator/fade_out_dialog</item>
     </style>
 
 </resources>

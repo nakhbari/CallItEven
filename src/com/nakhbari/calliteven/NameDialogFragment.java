@@ -38,6 +38,20 @@ public class NameDialogFragment extends DialogFragment implements
 	}
 
 	@Override
+	public void onStart() {
+		super.onStart();
+
+		// safety check
+		if (getDialog() == null) {
+			return;
+		}
+
+		// set the animations to use on showing and hiding the dialog
+		getDialog().getWindow().setWindowAnimations(
+				R.style.dialog_animation_fade);
+	}
+
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
@@ -79,7 +93,7 @@ public class NameDialogFragment extends DialogFragment implements
 
 		// Gets called when an item is clicked
 		if (v.getId() == R.id.nameOK) {
-			if (etName.getText().toString().length() > 0){
+			if (etName.getText().toString().length() > 0) {
 				// fill in the namelistitem with the dialog data
 				nameListItem.setName(etName.getText().toString().trim());
 

@@ -13,17 +13,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 public class EntryListFragment extends ListFragment {
 	EntryListCommunicator activityCommunicator;
 	private ArrayList<EntryListItem> m_entries = new ArrayList<EntryListItem>();
-	private int namePosition = 0;
+	private int m_namePosition = 0;
+	private String m_name = "", m_balance = "", m_Owing = "";
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		return inflater.inflate(R.layout.fragment_entry_list, container, false);
+
 	}
 
 	@Override
@@ -60,7 +62,7 @@ public class EntryListFragment extends ListFragment {
 		switch (item.getItemId()) {
 
 		case R.id.addEntryItem:
-			activityCommunicator.AddNewListEntryClicked(namePosition);
+			activityCommunicator.AddNewListEntryClicked(m_namePosition);
 			break;
 		case android.R.id.home:
 			activityCommunicator.NavigateBackToHome();
@@ -75,21 +77,19 @@ public class EntryListFragment extends ListFragment {
 
 		ActionBar actionBar = getActivity().getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(false);
-		
+
 		super.onPause();
 	}
 
 	/** ----------------------- Activity Functions ----------------- */
 	public void SetData(int position, ArrayList<EntryListItem> array) {
-		namePosition = position;
+		m_namePosition = position;
 		m_entries.clear();
 		m_entries.addAll(array);
 
-		if (m_entries.size() != 0
-				&& ((ArrayAdapter<EntryListItem>) getListAdapter()) != null) {
+		if (getListAdapter() != null) {
 
-			((ArrayAdapter<EntryListItem>) getListAdapter())
-					.notifyDataSetChanged();
+			((EntryListAdapter) getListAdapter()).notifyDataSetChanged();
 		}
 
 	}
@@ -110,6 +110,7 @@ public class EntryListFragment extends ListFragment {
 
 	public interface EntryListCommunicator {
 		public void AddNewListEntryClicked(int namePosition);
+
 		public void NavigateBackToHome();
 	}
 }
