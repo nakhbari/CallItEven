@@ -4,13 +4,20 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import com.nakhbari.calliteven.R.anim;
-
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.SparseBooleanArray;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ListView;
+
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 public class MainActivity extends ActionBarActivity implements
 		NameListFragment.NameListCommunicator,
@@ -38,7 +45,19 @@ public class MainActivity extends ActionBarActivity implements
 		// Turn off the up button initially
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(false);
+		
+		//Set Notification bar translucency 
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+			setTranslucentStatus(true);
 
+
+		SystemBarTintManager tintManager = new SystemBarTintManager(this);
+		tintManager.setStatusBarTintEnabled(true);
+		tintManager.setStatusBarTintResource(R.color.actionbar_background);
+
+        SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
+        findViewById(android.R.id.content).setPadding(0, config.getPixelInsetTop(true), config.getPixelInsetRight(), config.getPixelInsetBottom());
+		}
 	}
 
 	@Override
@@ -94,6 +113,12 @@ public class MainActivity extends ActionBarActivity implements
 
 	}
 
+	@Override
+	public void RemoveCheckedNameListItems(ListView listView) {
+		RemoveListViewItems(listView, -1);
+
+	}
+
 	/** ----------------------- NameDialogFragment Callbacks ----------------- */
 	@Override
 	public void SendNewNameData(NameListItem item) {
@@ -113,19 +138,19 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	/** ----------------------- EntryListFragment Functions ----------------- */
-	private void UpdateEntryListFragment(int namePosition, boolean shouldCalculateBalance) {
+	private void UpdateEntryListFragment(int namePosition,
+			boolean shouldCalculateBalance) {
 		// When the dialog returns, we must add the entry to
 		// the structure and inform the entry fragment
-		entryListFragment.SetData(namePosition, m_nameEntry.get(namePosition).getEntryArray());
-		
-		if(shouldCalculateBalance)
-		{
+		entryListFragment.SetData(namePosition, m_nameEntry.get(namePosition)
+				.getEntryArray());
 
-			CalculateBalance(namePosition);	
+		if (shouldCalculateBalance) {
+
+			CalculateBalance(namePosition);
 		}
 
 	}
-
 
 	/** ----------------------- EntryListFragment Callbacks ----------------- */
 	@Override
@@ -143,6 +168,13 @@ public class MainActivity extends ActionBarActivity implements
 	public void NavigateBackToHome() {
 		// Pop back to the last fragment
 		fm.popBackStack();
+	}
+
+	@Override
+	public void RemoveCheckedEntryListItems(ListView listView,
+			int nameListPosition) {
+		RemoveListViewItems(listView, nameListPosition);
+
 	}
 
 	/** ----------------------- EntryDialogFragment Callbacks ----------------- */
@@ -168,18 +200,15 @@ public class MainActivity extends ActionBarActivity implements
 	/** ----------------------------- Functions ------------------------------ */
 	private void CalculateBalance(int namePosition) {
 		// Calculate how much the person is owed, from the sum of entries
-		if (m_nameEntry.get(namePosition).getEntryArray().size() != 0) {
-			int balanceSum = 0;
+		int balanceSum = 0;
 
-			for (int i = 0; i < m_nameEntry.get(namePosition).getEntryArray()
-					.size(); i++) {
-				balanceSum += m_nameEntry.get(namePosition).getEntryArray()
-						.get(i).getPrice();
-			}
-
-			m_nameEntry.get(namePosition).setBalance(balanceSum);
+		for (int i = 0; i < m_nameEntry.get(namePosition).getEntryArray()
+				.size(); i++) {
+			balanceSum += m_nameEntry.get(namePosition).getEntryArray().get(i)
+					.getPrice();
 		}
 
+		m_nameEntry.get(namePosition).setBalance(balanceSum);
 	}
 
 	private void SaveDataStructure() {
@@ -196,4 +225,81 @@ public class MainActivity extends ActionBarActivity implements
 
 	}
 
+	private void RemoveListViewItems(ListView listView,
+			final int nameListPosition) {
+		// Get array of list items that are checked
+		SparseBooleanArray checkedItems = listView.getCheckedItemPositions();
+		int numCheckedItems = listView.getCheckedItemCount();
+
+		// iterate through each checked item
+		for (int i = numCheckedItems - 1; i >= 0; --i) {
+			if (checkedItems.valueAt(i) == false) {
+				continue;
+			}
+
+			final int position = checkedItems.keyAt(i);
+
+			int positionOnScreen = position
+					- listView.getFirstVisiblePosition();
+
+			// check if the item is visible
+			if (positionOnScreen >= 0
+					&& positionOnScreen < listView.getChildCount()) {
+				// if the item is visible, then animate a fadeout
+				final View view = listView.getChildAt(positionOnScreen);
+				view.animate().alpha(0).setDuration(1000)
+						.withEndAction(new Runnable() {
+
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								view.setAlpha(1);
+
+								if (nameListPosition == -1) {
+
+									m_nameEntry.remove(position);
+									UpdateNameListFragment();
+								} else {
+									m_nameEntry.get(nameListPosition)
+											.getEntryArray().remove(position);
+									UpdateEntryListFragment(nameListPosition,
+											true);
+								}
+							}
+
+						}).start();
+			} else {
+				listView.postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						if (nameListPosition == -1) {
+
+							m_nameEntry.remove(position);
+							UpdateNameListFragment();
+						} else {
+							m_nameEntry.get(nameListPosition).getEntryArray()
+									.remove(position);
+							UpdateEntryListFragment(nameListPosition, true);
+						}
+					}
+				}, 300);
+			}
+
+		}
+	}
+	
+	@TargetApi(19) 
+	private void setTranslucentStatus(boolean on) {
+		Window win = getWindow();
+		WindowManager.LayoutParams winParams = win.getAttributes();
+		final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+		if (on) {
+			winParams.flags |= bits;
+		} else {
+			winParams.flags &= ~bits;
+		}
+		win.setAttributes(winParams);
+		
+		
+	}
 }

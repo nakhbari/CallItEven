@@ -1,6 +1,8 @@
 package com.nakhbari.calliteven;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,6 +15,31 @@ public class NameListAdapter extends ArrayAdapter<NameListItem> {
 
 	// List of names
 	private ArrayList<NameListItem> objects;
+	private HashMap<Integer, Boolean> mSelection = new HashMap<Integer, Boolean>();
+
+	public void setNewSelection(int position, boolean value) {
+		mSelection.put(position, value);
+		notifyDataSetChanged();
+	}
+
+	public boolean isPositionChecked(int position) {
+		Boolean result = mSelection.get(position);
+		return result == null ? false : result;
+	}
+
+	public Set<Integer> getCurrentCheckedPosition() {
+		return mSelection.keySet();
+	}
+
+	public void removeSelection(int position) {
+		mSelection.remove(position);
+		notifyDataSetChanged();
+	}
+
+	public void clearSelection() {
+		mSelection = new HashMap<Integer, Boolean>();
+		notifyDataSetChanged();
+	}
 
 	/*
 	 * here we must override the constructor for ArrayAdapter the only variable
@@ -31,6 +58,8 @@ public class NameListAdapter extends ArrayAdapter<NameListItem> {
 	 */
 	public View getView(int position, View convertView, ViewGroup parent) {
 
+
+		
 		// assign the view we are converting to a local variable
 		View view = convertView;
 
@@ -50,6 +79,14 @@ public class NameListAdapter extends ArrayAdapter<NameListItem> {
 		 * 
 		 * Therefore, i refers to the current Item object.
 		 */
+		
+		if (mSelection.get(position) != null) {
+            view.setBackgroundColor(getContext().getResources().getColor(R.color.list_item_long_press));// this is a selected position so make it red
+        }
+		else
+		{
+			view.setBackgroundColor(getContext().getResources().getColor(android.R.color.white));
+		}
 		NameListItem i = objects.get(position);
 
 		if (i != null) {
@@ -65,16 +102,17 @@ public class NameListAdapter extends ArrayAdapter<NameListItem> {
 
 			// Manage what happens with the balance
 			if (balance != null) {
-				
 
 				if (i.getBalance() < 0) {
 					owesWho.setText("Is Owed: ");
-					balance.setText("$" + Long.toString(Math.abs(i.getBalance())));
+					balance.setText("$"
+							+ Long.toString(Math.abs(i.getBalance())));
 
 				} else if (i.getBalance() > 0) {
 
 					owesWho.setText("Owes You: ");
-					balance.setText("$" + Long.toString(Math.abs(i.getBalance())));
+					balance.setText("$"
+							+ Long.toString(Math.abs(i.getBalance())));
 
 				} else {
 

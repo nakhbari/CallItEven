@@ -140,7 +140,7 @@ public final class R {
 		public static final int abc_split_action_bar_is_narrow = 0x7f070002;
 	}
 	public static final class color {
-		public static final int abc_search_url_text_holo = 0x7f080014;
+		public static final int abc_search_url_text_holo = 0x7f080015;
 		public static final int abc_search_url_text_normal = 0x7f080000;
 		public static final int abc_search_url_text_pressed = 0x7f080002;
 		public static final int abc_search_url_text_selected = 0x7f080001;
@@ -149,11 +149,11 @@ public final class R {
 		public static final int calendar_header = 0x7f08000b;
 		public static final int circle_background = 0x7f080004;
 		public static final int darker_blue = 0x7f080009;
-		public static final int date_picker_selector = 0x7f080015;
+		public static final int date_picker_selector = 0x7f080016;
 		public static final int date_picker_text_normal = 0x7f08000a;
 		public static final int date_picker_view_animator = 0x7f08000c;
-		public static final int date_picker_year_selector = 0x7f080016;
-		public static final int done_text_color = 0x7f080017;
+		public static final int date_picker_year_selector = 0x7f080017;
+		public static final int done_text_color = 0x7f080018;
 		public static final int done_text_color_disabled = 0x7f080007;
 		public static final int done_text_color_normal = 0x7f080006;
 		public static final int line_background = 0x7f080005;

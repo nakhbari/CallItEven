@@ -869,27 +869,28 @@ containing a value of this type.
         public static final int abc_split_action_bar_is_narrow=0x7f070002;
     }
     public static final class color {
-        public static final int abc_search_url_text_holo=0x7f080014;
+        public static final int abc_search_url_text_holo=0x7f080015;
         public static final int abc_search_url_text_normal=0x7f080000;
         public static final int abc_search_url_text_pressed=0x7f080002;
         public static final int abc_search_url_text_selected=0x7f080001;
         public static final int actionbar_background=0x7f080010;
-        public static final int actionbar_text_color=0x7f080011;
+        public static final int actionbar_text_color=0x7f080012;
         public static final int ampm_text_color=0x7f08000d;
         public static final int blue=0x7f080008;
         public static final int calendar_header=0x7f08000b;
         public static final int circle_background=0x7f080004;
         public static final int darker_blue=0x7f080009;
-        public static final int date_picker_selector=0x7f080015;
+        public static final int date_picker_selector=0x7f080016;
         public static final int date_picker_text_normal=0x7f08000a;
         public static final int date_picker_view_animator=0x7f08000c;
-        public static final int date_picker_year_selector=0x7f080016;
-        public static final int done_text_color=0x7f080017;
+        public static final int date_picker_year_selector=0x7f080017;
+        public static final int done_text_color=0x7f080018;
         public static final int done_text_color_disabled=0x7f080007;
         public static final int done_text_color_normal=0x7f080006;
-        public static final int gray_border=0x7f080012;
-        public static final int gray_pressed=0x7f080013;
+        public static final int gray_border=0x7f080013;
+        public static final int gray_pressed=0x7f080014;
         public static final int line_background=0x7f080005;
+        public static final int list_item_long_press=0x7f080011;
         public static final int numbers_text_color=0x7f08000e;
         public static final int transparent_black=0x7f08000f;
         public static final int white=0x7f080003;
@@ -1164,7 +1165,7 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f060016;
         public static final int action_menu_presenter=0x7f060017;
         public static final int action_mode_close_button=0x7f06002d;
-        public static final int action_settings=0x7f060063;
+        public static final int action_settings=0x7f060064;
         public static final int activity_chooser_view_content=0x7f06002e;
         public static final int addEntryItem=0x7f060061;
         public static final int addNameItem=0x7f060062;
@@ -1210,6 +1211,7 @@ containing a value of this type.
         public static final int idFragment=0x7f060045;
         public static final int ifRoom=0x7f06000a;
         public static final int image=0x7f060030;
+        public static final int item_delete=0x7f060063;
         public static final int listMode=0x7f060001;
         public static final int list_item=0x7f060032;
         public static final int middle=0x7f060012;
@@ -1324,7 +1326,8 @@ containing a value of this type.
     public static final class menu {
         public static final int actionbar_entry_list=0x7f0e0000;
         public static final int actionbar_name_list=0x7f0e0001;
-        public static final int main=0x7f0e0002;
+        public static final int contextual_menu=0x7f0e0002;
+        public static final int main=0x7f0e0003;
     }
     public static final class string {
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
@@ -1444,13 +1447,12 @@ containing a value of this type.
 
 
 
+
     
 
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
             backward-compatibility can go here.
-
-
         
 
         Base application theme for API 11+. This theme completely replaces

@@ -6,20 +6,26 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.AbsListView.MultiChoiceModeListener;
 
 public class EntryListFragment extends ListFragment {
 	EntryListCommunicator activityCommunicator;
 	private ArrayList<EntryListItem> m_entries = new ArrayList<EntryListItem>();
 	private int m_namePosition = 0;
 	private String m_name = "", m_balance = "", m_Owing = "";
+	private EntryListAdapter m_Adapter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,9 +40,71 @@ public class EntryListFragment extends ListFragment {
 
 		// Setting the custom adapter which will handle the inflation of the
 		// individual rows.
-		EntryListAdapter adapter = new EntryListAdapter(getActivity(),
+		m_Adapter = new EntryListAdapter(getActivity(),
 				R.layout.row_entry_list, m_entries);
-		setListAdapter(adapter);
+		setListAdapter(m_Adapter);
+
+		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+
+		getListView().setMultiChoiceModeListener(new MultiChoiceModeListener() {
+			private int nr = 0;
+
+			@Override
+			public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public void onDestroyActionMode(ActionMode mode) {
+				// TODO Auto-generated method stub
+				m_Adapter.clearSelection();
+			}
+
+			@Override
+			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+				// TODO Auto-generated method stub
+
+				nr = 0;
+				getActivity().getMenuInflater().inflate(R.menu.contextual_menu,
+						menu);
+				return true;
+			}
+
+			@Override
+			public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+				// TODO Auto-generated method stub
+				switch (item.getItemId()) {
+
+				case R.id.item_delete:
+					nr = 0;
+					activityCommunicator
+							.RemoveCheckedEntryListItems(getListView(), m_namePosition);
+					m_Adapter.clearSelection();
+					mode.finish();
+				}
+				return false;
+			}
+
+			@Override
+			public void onItemCheckedStateChanged(ActionMode mode,
+					int position, long id, boolean checked) {
+				// TODO Auto-generated method stub
+				if (checked) {
+					nr++;
+					Animation animation = new AlphaAnimation(0.0f, 1.0f);
+					getListView().getChildAt(position)
+							.startAnimation(animation);
+					m_Adapter.setNewSelection(position, checked);
+
+				} else {
+					nr--;
+					m_Adapter.removeSelection(position);
+				}
+				mode.setTitle(nr + " selected");
+
+			}
+		});
 
 	}
 
@@ -112,5 +180,6 @@ public class EntryListFragment extends ListFragment {
 		public void AddNewListEntryClicked(int namePosition);
 
 		public void NavigateBackToHome();
+		public void RemoveCheckedEntryListItems(ListView listView, int nameListPosition);
 	}
 }

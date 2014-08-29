@@ -4,23 +4,24 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.ListView;
 
 public class NameListFragment extends ListFragment {
 
 	private ArrayList<NameListItem> m_nameEntry = new ArrayList<NameListItem>();
 	NameListCommunicator activityCommunicator;
+	private NameListAdapter m_Adapter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,9 +37,71 @@ public class NameListFragment extends ListFragment {
 
 		// Setting the custom adapter which will handle the inflation of the
 		// individual rows.
-		NameListAdapter adapter = new NameListAdapter(getActivity(),
-				R.layout.row_name_list, m_nameEntry);
-		setListAdapter(adapter);
+		m_Adapter = new NameListAdapter(getActivity(), R.layout.row_name_list,
+				m_nameEntry);
+		setListAdapter(m_Adapter);
+
+		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+
+		getListView().setMultiChoiceModeListener(new MultiChoiceModeListener() {
+			private int nr = 0;
+			
+			@Override
+			public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public void onDestroyActionMode(ActionMode mode) {
+				// TODO Auto-generated method stub
+				m_Adapter.clearSelection();
+			}
+
+			@Override
+			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+				// TODO Auto-generated method stub
+
+				nr = 0;
+				getActivity().getMenuInflater().inflate(R.menu.contextual_menu,
+						menu);
+				return true;
+			}
+
+			@Override
+			public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+				// TODO Auto-generated method stub
+				switch (item.getItemId()) {
+
+				case R.id.item_delete:
+					nr = 0;
+					activityCommunicator.RemoveCheckedNameListItems(getListView());
+					m_Adapter.clearSelection();
+					mode.finish();
+				}
+				return false;
+			}
+
+			@Override
+			public void onItemCheckedStateChanged(ActionMode mode,
+					int position, long id, boolean checked) {
+				// TODO Auto-generated method stub
+				if (checked) {
+					nr++;
+Animation animation = new AlphaAnimation(0.0f,1.0f);  
+					getListView().getChildAt(position).startAnimation(animation);
+					m_Adapter.setNewSelection(position, checked);
+
+				} else {
+					nr--;
+					m_Adapter.removeSelection(position);
+				}
+				mode.setTitle(nr + " selected");
+
+			}
+		});
+
+
 	}
 
 	@Override
@@ -55,6 +118,7 @@ public class NameListFragment extends ListFragment {
 
 		// Notify the fragment that there is an option menu to inflate
 		setHasOptionsMenu(true);
+
 		super.onCreate(savedInstanceState);
 	}
 
@@ -84,8 +148,7 @@ public class NameListFragment extends ListFragment {
 		m_nameEntry.addAll(array);
 		if (m_nameEntry.size() != 0) {
 
-			((ArrayAdapter<NameListItem>) getListAdapter())
-					.notifyDataSetChanged();
+			m_Adapter.notifyDataSetChanged();
 		}
 	}
 
@@ -107,5 +170,9 @@ public class NameListFragment extends ListFragment {
 		public void AddNewNameEntryClicked();
 
 		public void NameListItemClicked(int position);
+		public void RemoveCheckedNameListItems(ListView list);
 	}
+
+	/** --------------- Contextual Action Menu Interface ------------------ */
+
 }
