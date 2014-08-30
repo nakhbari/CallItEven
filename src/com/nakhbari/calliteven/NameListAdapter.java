@@ -81,11 +81,11 @@ public class NameListAdapter extends ArrayAdapter<NameListItem> {
 		 */
 		
 		if (mSelection.get(position) != null) {
-            view.setBackgroundColor(getContext().getResources().getColor(R.color.list_item_long_press));// this is a selected position so make it red
+            view.setBackgroundResource(R.color.list_item_long_press); //this is a selected position so make it dark bluew
         }
 		else
 		{
-			view.setBackgroundColor(getContext().getResources().getColor(android.R.color.white));
+			view.setBackgroundResource(R.drawable.list_background_normal);
 		}
 		NameListItem i = objects.get(position);
 

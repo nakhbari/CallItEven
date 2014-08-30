@@ -75,11 +75,11 @@ public class EntryListAdapter extends ArrayAdapter<EntryListItem> {
 		}
 
 		if (mSelection.get(position) != null) {
-            view.setBackgroundColor(getContext().getResources().getColor(R.color.list_item_long_press));// this is a selected position so make it red
+            view.setBackgroundResource(R.color.list_item_long_press); //this is a selected position so make it dark bluew
         }
 		else
 		{
-			view.setBackgroundColor(getContext().getResources().getColor(android.R.color.white));
+			view.setBackgroundResource(R.drawable.list_background_normal);
 		}
 		/*
 		 * Recall that the variable position is sent in as an argument to this

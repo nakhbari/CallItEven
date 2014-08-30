@@ -247,7 +247,7 @@ public class MainActivity extends ActionBarActivity implements
 					&& positionOnScreen < listView.getChildCount()) {
 				// if the item is visible, then animate a fadeout
 				final View view = listView.getChildAt(positionOnScreen);
-				view.animate().alpha(0).setDuration(1000)
+				view.animate().alpha(0).setDuration(500)
 						.withEndAction(new Runnable() {
 
 							@Override

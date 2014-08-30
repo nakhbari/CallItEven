@@ -1152,6 +1152,9 @@ containing a value of this type.
         public static final int ic_action_add_person=0x7f02005b;
         public static final int ic_action_new_event=0x7f02005c;
         public static final int ic_launcher=0x7f02005d;
+        public static final int list_background_normal=0x7f02005e;
+        public static final int list_selector=0x7f02005f;
+        public static final int list_selector_pressed=0x7f020060;
     }
     public static final class id {
         public static final int action_bar=0x7f060025;

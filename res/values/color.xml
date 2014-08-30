@@ -2,7 +2,7 @@
 <resources>
 
     <color name="actionbar_background">#0080ff</color>
-    <color name="list_item_long_press">#B2D8FF</color>
+    <color name="list_item_long_press">#66b2ff</color>
     <color name="actionbar_text_color">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="gray_border">#e6e6e6</color>

@@ -305,6 +305,9 @@ int drawable custom_spinner_option 0x7f02005a
 int drawable ic_action_add_person 0x7f02005b
 int drawable ic_action_new_event 0x7f02005c
 int drawable ic_launcher 0x7f02005d
+int drawable list_background_normal 0x7f02005e
+int drawable list_selector 0x7f02005f
+int drawable list_selector_pressed 0x7f020060
 int id action_bar 0x7f060025
 int id action_bar_activity_content 0x7f060015
 int id action_bar_container 0x7f060024
