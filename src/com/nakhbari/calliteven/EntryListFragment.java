@@ -92,9 +92,6 @@ public class EntryListFragment extends ListFragment {
 				// TODO Auto-generated method stub
 				if (checked) {
 					nr++;
-					Animation animation = new AlphaAnimation(0.0f, 1.0f);
-					getListView().getChildAt(position)
-							.startAnimation(animation);
 					m_Adapter.setNewSelection(position, checked);
 
 				} else {
