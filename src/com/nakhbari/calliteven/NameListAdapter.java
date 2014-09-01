@@ -27,8 +27,13 @@ public class NameListAdapter extends ArrayAdapter<NameListItem> {
 		return result == null ? false : result;
 	}
 
-	public Set<Integer> getCurrentCheckedPosition() {
-		return mSelection.keySet();
+	public int getCurrentCheckedPosition() {
+		Set<Integer> i = mSelection.keySet();
+		if (!i.isEmpty()) {
+			return i.iterator().next();
+		}
+
+		return -1;
 	}
 
 	public void removeSelection(int position) {
@@ -58,8 +63,6 @@ public class NameListAdapter extends ArrayAdapter<NameListItem> {
 	 */
 	public View getView(int position, View convertView, ViewGroup parent) {
 
-
-		
 		// assign the view we are converting to a local variable
 		View view = convertView;
 
@@ -79,12 +82,18 @@ public class NameListAdapter extends ArrayAdapter<NameListItem> {
 		 * 
 		 * Therefore, i refers to the current Item object.
 		 */
-		
+
 		if (mSelection.get(position) != null) {
-            view.setBackgroundResource(R.color.list_item_long_press); //this is a selected position so make it dark bluew
-        }
-		else
-		{
+			view.setBackgroundResource(R.color.list_item_long_press); // this is
+																		// a
+																		// selected
+																		// position
+																		// so
+																		// make
+																		// it
+																		// dark
+																		// bluew
+		} else {
 			view.setBackgroundResource(R.drawable.list_background_normal);
 		}
 		NameListItem i = objects.get(position);

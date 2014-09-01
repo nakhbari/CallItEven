@@ -51,7 +51,12 @@ public class EntryListFragment extends ListFragment {
 
 			@Override
 			public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-				// TODO Auto-generated method stub
+				if (nr == 1) {
+					menu.findItem(R.id.item_edit).setVisible(true);
+				} else {
+
+					menu.findItem(R.id.item_edit).setVisible(false);
+				}
 				return false;
 			}
 
@@ -78,10 +83,22 @@ public class EntryListFragment extends ListFragment {
 
 				case R.id.item_delete:
 					nr = 0;
-					activityCommunicator
-							.RemoveCheckedEntryListItems(getListView(), m_namePosition);
+					activityCommunicator.RemoveCheckedEntryListItems(
+							getListView(), m_namePosition);
 					m_Adapter.clearSelection();
 					mode.finish();
+					break;
+
+				case R.id.item_edit:
+					int pos = m_Adapter.getCurrentCheckedPosition();
+					if (pos >= 0) {
+
+						activityCommunicator.EditEntryItem(m_namePosition, pos);
+					}
+
+					m_Adapter.clearSelection();
+					mode.finish();
+					break;
 				}
 				return false;
 			}
@@ -99,7 +116,7 @@ public class EntryListFragment extends ListFragment {
 					m_Adapter.removeSelection(position);
 				}
 				mode.setTitle(nr + " selected");
-
+				mode.invalidate();
 			}
 		});
 
@@ -176,7 +193,11 @@ public class EntryListFragment extends ListFragment {
 	public interface EntryListCommunicator {
 		public void AddNewListEntryClicked(int namePosition);
 
+		public void EditEntryItem(int namePosition, int entryPosition);
+
 		public void NavigateBackToHome();
-		public void RemoveCheckedEntryListItems(ListView listView, int nameListPosition);
+
+		public void RemoveCheckedEntryListItems(ListView listView,
+				int nameListPosition);
 	}
 }

@@ -45,10 +45,15 @@ public class NameListFragment extends ListFragment {
 
 		getListView().setMultiChoiceModeListener(new MultiChoiceModeListener() {
 			private int nr = 0;
-			
+
 			@Override
 			public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-				// TODO Auto-generated method stub
+				if (nr == 1) {
+					menu.findItem(R.id.item_edit).setVisible(true);
+				} else {
+
+					menu.findItem(R.id.item_edit).setVisible(false);
+				}
 				return false;
 			}
 
@@ -75,10 +80,24 @@ public class NameListFragment extends ListFragment {
 
 				case R.id.item_delete:
 					nr = 0;
-					activityCommunicator.RemoveCheckedNameListItems(getListView());
+					activityCommunicator
+							.RemoveCheckedNameListItems(getListView());
 					m_Adapter.clearSelection();
 					mode.finish();
+					break;
+
+				case R.id.item_edit:
+					int pos = m_Adapter.getCurrentCheckedPosition();
+					if (pos >= 0) {
+
+						activityCommunicator.EditNameEntry(pos);
+					}
+
+					m_Adapter.clearSelection();
+					mode.finish();
+					break;
 				}
+
 				return false;
 			}
 
@@ -96,9 +115,10 @@ public class NameListFragment extends ListFragment {
 				}
 				mode.setTitle(nr + " selected");
 
+				mode.invalidate();
+
 			}
 		});
-
 
 	}
 
@@ -168,7 +188,10 @@ public class NameListFragment extends ListFragment {
 		public void AddNewNameEntryClicked();
 
 		public void NameListItemClicked(int position);
+
 		public void RemoveCheckedNameListItems(ListView list);
+
+		public void EditNameEntry(int position);
 	}
 
 	/** --------------- Contextual Action Menu Interface ------------------ */

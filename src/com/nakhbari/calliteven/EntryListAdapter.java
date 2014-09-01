@@ -30,8 +30,13 @@ public class EntryListAdapter extends ArrayAdapter<EntryListItem> {
 		return result == null ? false : result;
 	}
 
-	public Set<Integer> getCurrentCheckedPosition() {
-		return mSelection.keySet();
+	public int getCurrentCheckedPosition() {
+		Set<Integer> i = mSelection.keySet();
+		if (!i.isEmpty()) {
+			return i.iterator().next();
+		}
+
+		return -1;
 	}
 
 	public void removeSelection(int position) {
@@ -75,10 +80,16 @@ public class EntryListAdapter extends ArrayAdapter<EntryListItem> {
 		}
 
 		if (mSelection.get(position) != null) {
-            view.setBackgroundResource(R.color.list_item_long_press); //this is a selected position so make it dark bluew
-        }
-		else
-		{
+			view.setBackgroundResource(R.color.list_item_long_press); // this is
+																		// a
+																		// selected
+																		// position
+																		// so
+																		// make
+																		// it
+																		// dark
+																		// bluew
+		} else {
 			view.setBackgroundResource(R.drawable.list_background_normal);
 		}
 		/*

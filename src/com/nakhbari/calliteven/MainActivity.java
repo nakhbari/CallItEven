@@ -45,18 +45,20 @@ public class MainActivity extends ActionBarActivity implements
 		// Turn off the up button initially
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(false);
-		
-		//Set Notification bar translucency 
+
+		// Set Notification bar translucency
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 			setTranslucentStatus(true);
 
+			SystemBarTintManager tintManager = new SystemBarTintManager(this);
+			tintManager.setStatusBarTintEnabled(true);
+			tintManager.setStatusBarTintResource(R.color.actionbar_background);
 
-		SystemBarTintManager tintManager = new SystemBarTintManager(this);
-		tintManager.setStatusBarTintEnabled(true);
-		tintManager.setStatusBarTintResource(R.color.actionbar_background);
-
-        SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
-        findViewById(android.R.id.content).setPadding(0, config.getPixelInsetTop(true), config.getPixelInsetRight(), config.getPixelInsetBottom());
+			SystemBarTintManager.SystemBarConfig config = tintManager
+					.getConfig();
+			findViewById(android.R.id.content).setPadding(0,
+					config.getPixelInsetTop(true), config.getPixelInsetRight(),
+					config.getPixelInsetBottom());
 		}
 	}
 
@@ -88,7 +90,7 @@ public class MainActivity extends ActionBarActivity implements
 		NameDialogFragment newDialogFragment = new NameDialogFragment();
 
 		// Do not populate the dialog, since it is a NEW entry
-		newDialogFragment.SetNameListItem(new NameListItem());
+		newDialogFragment.SetNameListItem(new NameListItem(), -1);
 		newDialogFragment.show(fm, "NameDialog");
 	}
 
@@ -119,12 +121,28 @@ public class MainActivity extends ActionBarActivity implements
 
 	}
 
+	@Override
+	public void EditNameEntry(int position) {
+		// Open Dialog so a new person can be added to the list
+		NameDialogFragment newDialogFragment = new NameDialogFragment();
+
+		// Do not populate the dialog, since it is a NEW entry
+		newDialogFragment.SetNameListItem(m_nameEntry.get(position), position);
+		newDialogFragment.show(fm, "NameDialog");
+
+	}
+
 	/** ----------------------- NameDialogFragment Callbacks ----------------- */
 	@Override
-	public void SendNewNameData(NameListItem item) {
+	public void SendNameData(NameListItem item, int position) {
 		// When the dialog returns, we must add the name to
 		// the structure and inform the name fragment
-		m_nameEntry.add(item);
+		if (position >= 0) {
+			m_nameEntry.set(position, item);
+		} else {
+			m_nameEntry.add(item);
+
+		}
 
 		// Sort the List Alphabetically
 		Collections.sort(m_nameEntry, new Comparator<NameListItem>() {
@@ -159,7 +177,8 @@ public class MainActivity extends ActionBarActivity implements
 		// to open the dialog which the user can put in the details
 		// of the new entry
 		EntryDialogFragment newDialogFragment = new EntryDialogFragment();
-		newDialogFragment.SetEntryListItem(namePosition, new EntryListItem());
+		newDialogFragment.SetEntryListItem(new EntryListItem(), namePosition,
+				-1);
 		newDialogFragment.show(fm, "EntryDialog");
 
 	}
@@ -177,15 +196,33 @@ public class MainActivity extends ActionBarActivity implements
 
 	}
 
+	@Override
+	public void EditEntryItem(int namePosition, int entryPosition) {
+		// Open Dialog so a new entry item can be added to the list
+		EntryDialogFragment newDialogFragment = new EntryDialogFragment();
+
+		newDialogFragment.SetEntryListItem(m_nameEntry.get(namePosition)
+				.getEntryArray().get(entryPosition), namePosition,
+				entryPosition);
+		newDialogFragment.show(fm, "EntryDialog");
+
+	}
+
 	/** ----------------------- EntryDialogFragment Callbacks ----------------- */
 
 	@Override
-	public void SendNewEntryData(int position, EntryListItem item) {
+	public void SendEntryItemData(EntryListItem item, int namePosition,
+			int entryPosition) {
 		// Update the Entry Fragment with new data
-		m_nameEntry.get(position).getEntryArray().add(item);
+		if (entryPosition >= 0) {
+			m_nameEntry.get(namePosition).getEntryArray()
+					.set(entryPosition, item);
+		} else {
+			m_nameEntry.get(namePosition).getEntryArray().add(item);
+		}
 
 		// Sort the List by Dates
-		Collections.sort(m_nameEntry.get(position).getEntryArray(),
+		Collections.sort(m_nameEntry.get(namePosition).getEntryArray(),
 				new Comparator<EntryListItem>() {
 					public int compare(EntryListItem item1, EntryListItem item2) {
 						return (item1.getCalendar().getTime().compareTo(item2
@@ -193,7 +230,7 @@ public class MainActivity extends ActionBarActivity implements
 					}
 				});
 
-		UpdateEntryListFragment(position, true);
+		UpdateEntryListFragment(namePosition, true);
 
 	}
 
@@ -287,8 +324,8 @@ public class MainActivity extends ActionBarActivity implements
 
 		}
 	}
-	
-	@TargetApi(19) 
+
+	@TargetApi(19)
 	private void setTranslucentStatus(boolean on) {
 		Window win = getWindow();
 		WindowManager.LayoutParams winParams = win.getAttributes();
@@ -299,7 +336,7 @@ public class MainActivity extends ActionBarActivity implements
 			winParams.flags &= ~bits;
 		}
 		win.setAttributes(winParams);
-		
-		
+
 	}
+
 }

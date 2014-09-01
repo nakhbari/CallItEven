@@ -26,6 +26,7 @@ public class EntryDialogFragment extends DialogFragment implements
 
 	EntryDialogCommunicator activityCommunicator;
 	int namePosition = 0;
+	int entryPosition = 0;
 	EntryListItem entryItem;
 	EditText etTitle;
 	EditText etPrice;
@@ -85,19 +86,25 @@ public class EntryDialogFragment extends DialogFragment implements
 				MIN_PRICE, MAX_PRICE) });
 		spWhoPaid = (Spinner) view.findViewById(R.id.spWhoPaid);
 
-		// Set the edit texts within the Dialog, if the entry item is filled out
-		if (entryItem != null && etTitle != null && etPrice != null
-				&& !(entryItem.getTitle() == "default")
-				&& !(entryItem.getPrice() == 0)) {
-			etTitle.setText(entryItem.getTitle());
-			etPrice.setText(Long.toString(entryItem.getPrice()));
-		}
-
 		// Find the yes and cancel buttons in the dialog
 		Button yesButton = (Button) view.findViewById(R.id.entryOK);
 		Button cancelButton = (Button) view.findViewById(R.id.entryCancel);
 		dateButton = (Button) view.findViewById(R.id.dialogEntryDate);
 
+		// Set the edit texts within the Dialog, if the entry item is filled out
+		if (entryItem != null && etTitle != null && etPrice != null
+				&& dateButton != null && !(entryItem.getTitle() == "default")) {
+			etTitle.setText(entryItem.getTitle());
+			etTitle.setSelection(entryItem.getTitle().length());
+			etPrice.setText(Long.toString(entryItem.getPrice()));
+			dateButton.setText(GetStringFromCalendar(entryItem.getCalendar()));
+			
+		}
+		else{
+
+			final Calendar calendar = Calendar.getInstance();
+			dateButton.setText(GetStringFromCalendar(calendar));	
+		}
 		// Listen for clicks
 		if (yesButton != null) {
 
@@ -109,9 +116,7 @@ public class EntryDialogFragment extends DialogFragment implements
 		}
 		if (dateButton != null) {
 
-			final Calendar calendar = Calendar.getInstance();
 			dateButton.setOnClickListener(this);
-			dateButton.setText(GetStringFromCalendar(calendar));
 		}
 
 	}
@@ -146,7 +151,7 @@ public class EntryDialogFragment extends DialogFragment implements
 				}
 
 				// Send data to the fragment
-				activityCommunicator.SendNewEntryData(namePosition, entryItem);
+				activityCommunicator.SendEntryItemData(entryItem, namePosition, entryPosition);
 
 				dismiss();
 			}
@@ -193,9 +198,11 @@ public class EntryDialogFragment extends DialogFragment implements
 
 	/** ----------------------- Activity Callbacks --------------------------- */
 
-	public void SetEntryListItem(int position, EntryListItem item) {
+	public void SetEntryListItem(EntryListItem item, int namePosition,
+			int entryPosition) {
 		entryItem = item;
-		namePosition = position;
+		this.namePosition = namePosition;
+		this.entryPosition = entryPosition;
 	}
 
 	/** ----------------------- Activity Interface --------------------------- */
@@ -213,7 +220,7 @@ public class EntryDialogFragment extends DialogFragment implements
 	}
 
 	public interface EntryDialogCommunicator {
-		public void SendNewEntryData(int position, EntryListItem item);
+		public void SendEntryItemData(EntryListItem item, int namePosition, int entryPosition);
 	}
 
 }

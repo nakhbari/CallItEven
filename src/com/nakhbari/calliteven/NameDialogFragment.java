@@ -17,6 +17,7 @@ public class NameDialogFragment extends DialogFragment implements
 	NameListItem nameListItem;
 	EditText etName;
 	NameDialogCommunicator activityCommunicator;
+	int namePos = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -70,6 +71,7 @@ public class NameDialogFragment extends DialogFragment implements
 		if (etName != null && !(nameListItem.getName() == "default")) {
 
 			etName.setText(nameListItem.getName());
+			etName.setSelection(nameListItem.getName().length());
 		}
 
 		// Find the yes and cancel buttons in the dialog
@@ -98,7 +100,7 @@ public class NameDialogFragment extends DialogFragment implements
 				nameListItem.setName(etName.getText().toString().trim());
 
 				// Send data to the fragment
-				activityCommunicator.SendNewNameData(nameListItem);
+				activityCommunicator.SendNameData(nameListItem, namePos);
 
 				dismiss();
 			} else {
@@ -114,8 +116,9 @@ public class NameDialogFragment extends DialogFragment implements
 
 	/** ----------------------- Activity Callbacks --------------------------- */
 
-	public void SetNameListItem(NameListItem item) {
+	public void SetNameListItem(NameListItem item, int position) {
 		nameListItem = item;
+		namePos = position;
 	}
 
 	/** ----------------------- Activity Interface --------------------------- */
@@ -133,6 +136,6 @@ public class NameDialogFragment extends DialogFragment implements
 	}
 
 	public interface NameDialogCommunicator {
-		public void SendNewNameData(NameListItem item);
+		public void SendNameData(NameListItem item, int position);
 	}
 }

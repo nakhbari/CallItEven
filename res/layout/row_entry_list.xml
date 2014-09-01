@@ -69,7 +69,8 @@
             android:gravity="right"
             android:padding="3dp"
             android:text="Date"
-            android:textSize="16sp" />
+            android:textSize="16sp" 
+            android:textColor="@color/gray_text"/>
     </LinearLayout>
 
 </LinearLayout>
