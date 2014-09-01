@@ -7,6 +7,6 @@
     <dimen name="name_list_dialog_height">220dp</dimen>
     <dimen name="entry_list_dialog_width">300dp</dimen>
     <dimen name="entry_list_dialog_height">350dp</dimen>
-    <dimen name="name_list_item_height">300dp</dimen>
+    <dimen name="name_list_item_height">200dp</dimen>
 
 </resources>

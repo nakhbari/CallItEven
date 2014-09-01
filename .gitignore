@@ -40,3 +40,9 @@ Icon
 *.class
 
 *.class
+
+*.class
+
+*.jar
+
+*.cache

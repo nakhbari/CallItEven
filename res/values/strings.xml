@@ -9,7 +9,7 @@
     <string name="no_balance">You\'re EVEN</string>
 
     <string-array name="who_paid_array">
-        <item>I Paid</item>
+        <item>You Paid</item>
         <item>They Paid</item>
     </string-array>
 

@@ -71,7 +71,7 @@ public class NameListAdapter extends ArrayAdapter<NameListItem> {
 		if (view == null) {
 			LayoutInflater inflater = (LayoutInflater) getContext()
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			view = inflater.inflate(R.layout.row_name_list, null);
+			view = inflater.inflate(R.layout.row_name_list, parent, false);
 		}
 
 		/*
@@ -94,7 +94,7 @@ public class NameListAdapter extends ArrayAdapter<NameListItem> {
 																		// dark
 																		// bluew
 		} else {
-			view.setBackgroundResource(R.drawable.list_background_normal);
+			view.setBackgroundResource(android.R.color.transparent);
 		}
 		NameListItem i = objects.get(position);
 
@@ -113,13 +113,13 @@ public class NameListAdapter extends ArrayAdapter<NameListItem> {
 			if (balance != null) {
 
 				if (i.getBalance() < 0) {
-					owesWho.setText("Is Owed: ");
+					owesWho.setText("Is Owed");
 					balance.setText("$"
 							+ Long.toString(Math.abs(i.getBalance())));
 
 				} else if (i.getBalance() > 0) {
 
-					owesWho.setText("Owes You: ");
+					owesWho.setText("Owes You");
 					balance.setText("$"
 							+ Long.toString(Math.abs(i.getBalance())));
 
