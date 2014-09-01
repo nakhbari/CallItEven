@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/name_list_item_height" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/card_background" >
+
+        <TextView
+            android:id="@+id/nameText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:singleLine="true"
+            android:text="FirstName LastName"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/divLine"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_below="@id/nameText"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/divider_line" />
+
+        <TextView
+            android:id="@+id/owingText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divLine"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="50dp"
+            android:gravity="right|center"
+            android:singleLine="true"
+            android:text="Owes"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/balanceText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/owingText"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="10dp"
+            android:gravity="right|center"
+            android:singleLine="true"
+            android:text="Balance"
+            android:textSize="28sp" />
+    </RelativeLayout>
+
+</FrameLayout>

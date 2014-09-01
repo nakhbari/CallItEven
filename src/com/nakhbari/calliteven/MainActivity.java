@@ -284,7 +284,7 @@ public class MainActivity extends ActionBarActivity implements
 					&& positionOnScreen < listView.getChildCount()) {
 				// if the item is visible, then animate a fadeout
 				final View view = listView.getChildAt(positionOnScreen);
-				view.animate().alpha(0).setDuration(500)
+				view.animate().alpha(0).setDuration(300)
 						.withEndAction(new Runnable() {
 
 							@Override
@@ -319,7 +319,7 @@ public class MainActivity extends ActionBarActivity implements
 							UpdateEntryListFragment(nameListPosition, true);
 						}
 					}
-				}, 300);
+				}, 350);
 			}
 
 		}
