@@ -10,6 +10,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
@@ -62,11 +64,21 @@ public class EntryListAdapter extends ArrayAdapter<EntryListItem> {
 		this.m_rowEntries = rowEntries;
 	}
 
+	static class ViewHolder {
+		TextView title;
+		TextView price;
+		TextView date;
+		TextView whoPaid;
+		int lastPosition;
+	}
+
 	/*
 	 * we are overriding the getView method here - this is what defines how each
 	 * list item will look.
 	 */
 	public View getView(int position, View convertView, ViewGroup parent) {
+
+		ViewHolder holder = new ViewHolder();
 
 		// assign the view we are converting to a local variable
 		View view = convertView;
@@ -77,6 +89,26 @@ public class EntryListAdapter extends ArrayAdapter<EntryListItem> {
 			LayoutInflater inflater = (LayoutInflater) getContext()
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			view = inflater.inflate(R.layout.row_entry_list, null);
+
+			holder.title = (TextView) view.findViewById(R.id.entryTitle);
+			holder.price = (TextView) view.findViewById(R.id.entryPrice);
+			holder.date = (TextView) view.findViewById(R.id.entryDate);
+			holder.whoPaid = (TextView) view.findViewById(R.id.tvWhoPaidEntry);
+
+			view.setTag(holder);
+		} else {
+			holder = (ViewHolder) view.getTag();
+		}
+
+		// Sliding in animation
+		if (position != holder.lastPosition) {
+			Animation animation = AnimationUtils
+					.loadAnimation(
+							getContext(),
+							(position > holder.lastPosition) ? R.animator.up_from_bottom
+									: R.animator.down_from_top);
+			view.startAnimation(animation);
+			holder.lastPosition = position;
 		}
 
 		if (mSelection.get(position) != null) {
@@ -104,33 +136,28 @@ public class EntryListAdapter extends ArrayAdapter<EntryListItem> {
 
 		if (entryItem != null) {
 
-			TextView title = (TextView) view.findViewById(R.id.entryTitle);
-			TextView price = (TextView) view.findViewById(R.id.entryPrice);
-			TextView date = (TextView) view.findViewById(R.id.entryDate);
-			TextView whoPaid = (TextView) view
-					.findViewById(R.id.tvWhoPaidEntry);
 			DateFormat dateFormat = DateFormat.getDateInstance();
 
 			// Check to see if each individual name is null
-			if (title != null) {
-				title.setText(entryItem.getTitle());
+			if (holder.title != null) {
+				holder.title.setText(entryItem.getTitle());
 			}
 
-			if (price != null) {
+			if (holder.price != null) {
 				if (entryItem.getPrice() >= 0) {
-					whoPaid.setText(arrayWhoPaid[0]);
+					holder.whoPaid.setText(arrayWhoPaid[0]);
 				} else {
 
-					whoPaid.setText(arrayWhoPaid[1]);
+					holder.whoPaid.setText(arrayWhoPaid[1]);
 				}
 
-				price.setText("$"
+				holder.price.setText("$"
 						+ Long.toString(Math.abs(entryItem.getPrice())));
 
 			}
 
-			if (date != null) {
-				date.setText((dateFormat.format(entryItem.getCalendar()
+			if (holder.date != null) {
+				holder.date.setText((dateFormat.format(entryItem.getCalendar()
 						.getTime()).toString()));
 
 			}
