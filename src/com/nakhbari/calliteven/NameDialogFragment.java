@@ -5,17 +5,24 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.SearchView.SearchAutoComplete;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 public class NameDialogFragment extends DialogFragment implements
 		View.OnClickListener {
+
+	static class ViewHolder {
+		SearchView svName;
+		CheckBox cbFirstName;
+	}
+
 	NameListItem nameListItem;
-	SearchView svName;
+	ViewHolder holder = new ViewHolder();
 	NameDialogCommunicator activityCommunicator;
 	int namePos = 0;
 
@@ -76,18 +83,26 @@ public class NameDialogFragment extends DialogFragment implements
 
 	private void initializeDialog(View view) {
 
-		svName = (SearchView) view.findViewById(R.id.dialogSearch);
+		holder.svName = (SearchView) view.findViewById(R.id.dialogSearch);
+		holder.cbFirstName = (CheckBox) view.findViewById(R.id.dialogFirstNameCheckBox);
 
 		// Set the edit texts within the Dialog, if the Name item is filled out
-		if (svName != null) {
+		if (holder.svName != null) {
 
 			if (!(nameListItem.getName() == "default")) {
 
-				svName.setQuery(nameListItem.getName(), false);
-				// tvName.setSelection(nameListItem.getName().length());
+				holder.svName.setQuery(nameListItem.getName(), false);
 			}
-			svName.setIconified(false);
-			svName.requestFocus();
+			
+			 // Theme the SearchView's AutoCompleteTextView drop down. 
+		    SearchAutoComplete autoCompleteTextView = (SearchAutoComplete) holder.svName.findViewById(R.id.search_src_text);
+
+		    if (autoCompleteTextView != null) { 
+		        autoCompleteTextView.setDropDownBackgroundResource(R.drawable.abc_search_dropdown_light);
+		    }
+		    
+			holder.svName.setIconified(false);
+			holder.svName.requestFocus();
 		}
 
 		// Find the yes and cancel buttons in the dialog
@@ -111,9 +126,16 @@ public class NameDialogFragment extends DialogFragment implements
 
 		// Gets called when an item is clicked
 		if (v.getId() == R.id.nameOK) {
-			if (svName.getQuery().toString().length() > 0) {
+			if (holder.svName.getQuery().toString().length() > 0) {
+
 				// fill in the namelistitem with the dialog data
-				nameListItem.setName(svName.getQuery().toString().trim());
+
+				String name = holder.svName.getQuery().toString().trim();
+
+				if (holder.cbFirstName.isChecked()) {
+					name = name.split(" ", 2)[0];
+				}
+				nameListItem.setName(name);
 
 				// Send data to the fragment
 				activityCommunicator.SendNameData(nameListItem, namePos);
@@ -138,10 +160,10 @@ public class NameDialogFragment extends DialogFragment implements
 	}
 
 	public void SetSearchQuery(String str) {
-		if (svName != null) {
+		if (holder.svName != null) {
 
-			svName.setQuery(str, false);
-			svName.clearFocus();
+			holder.svName.setQuery(str, false);
+			holder.svName.clearFocus();
 		}
 	}
 
