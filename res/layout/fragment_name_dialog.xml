@@ -13,13 +13,13 @@
         android:orientation="vertical"
         android:paddingTop="5dp" >
 
-        <EditText
-            android:id="@+id/dialogName"
+        <android.support.v7.widget.SearchView
+            android:id="@+id/dialogSearch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="30dp"
             android:layout_marginBottom="30dp"
-            android:hint="Name" />
+            android:hint="@string/find_contact" />
     </LinearLayout>
 
     <LinearLayout

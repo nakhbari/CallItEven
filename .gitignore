@@ -46,3 +46,21 @@ Icon
 *.jar
 
 *.cache
+
+*.apk
+
+*.dex
+
+*.class
+
+*.jar
+
+*.cache
+
+*.txt
+
+*.ap_
+
+*.java
+
+*.properties

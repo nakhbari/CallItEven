@@ -1,21 +1,21 @@
 package com.nakhbari.calliteven;
 
-import com.nakhbari.calliteven.NameListFragment.NameListCommunicator;
-
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class NameDialogFragment extends DialogFragment implements
 		View.OnClickListener {
 	NameListItem nameListItem;
-	EditText etName;
+	SearchView svName;
 	NameDialogCommunicator activityCommunicator;
 	int namePos = 0;
 
@@ -23,7 +23,9 @@ public class NameDialogFragment extends DialogFragment implements
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+
 		setStyle(DialogFragment.STYLE_NO_TITLE, DialogFragment.STYLE_NORMAL);
+
 	}
 
 	@Override
@@ -63,15 +65,29 @@ public class NameDialogFragment extends DialogFragment implements
 		return view;
 	}
 
+	@Override
+	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onViewCreated(view, savedInstanceState);
+
+		activityCommunicator.InitSearchView((SearchView) view
+				.findViewById(R.id.dialogSearch));
+	}
+
 	private void initializeDialog(View view) {
 
-		etName = (EditText) view.findViewById(R.id.dialogName);
+		svName = (SearchView) view.findViewById(R.id.dialogSearch);
 
 		// Set the edit texts within the Dialog, if the Name item is filled out
-		if (etName != null && !(nameListItem.getName() == "default")) {
+		if (svName != null) {
 
-			etName.setText(nameListItem.getName());
-			etName.setSelection(nameListItem.getName().length());
+			if (!(nameListItem.getName() == "default")) {
+
+				svName.setQuery(nameListItem.getName(), false);
+				// tvName.setSelection(nameListItem.getName().length());
+			}
+			svName.setIconified(false);
+			svName.requestFocus();
 		}
 
 		// Find the yes and cancel buttons in the dialog
@@ -95,9 +111,9 @@ public class NameDialogFragment extends DialogFragment implements
 
 		// Gets called when an item is clicked
 		if (v.getId() == R.id.nameOK) {
-			if (etName.getText().toString().length() > 0) {
+			if (svName.getQuery().toString().length() > 0) {
 				// fill in the namelistitem with the dialog data
-				nameListItem.setName(etName.getText().toString().trim());
+				nameListItem.setName(svName.getQuery().toString().trim());
 
 				// Send data to the fragment
 				activityCommunicator.SendNameData(nameListItem, namePos);
@@ -121,6 +137,14 @@ public class NameDialogFragment extends DialogFragment implements
 		namePos = position;
 	}
 
+	public void SetSearchQuery(String str) {
+		if (svName != null) {
+
+			svName.setQuery(str, false);
+			svName.clearFocus();
+		}
+	}
+
 	/** ----------------------- Activity Interface --------------------------- */
 
 	@Override
@@ -137,5 +161,7 @@ public class NameDialogFragment extends DialogFragment implements
 
 	public interface NameDialogCommunicator {
 		public void SendNameData(NameListItem item, int position);
+
+		public void InitSearchView(SearchView searchView);
 	}
 }

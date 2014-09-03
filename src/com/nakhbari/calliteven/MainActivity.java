@@ -5,17 +5,25 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import android.annotation.TargetApi;
+import android.app.SearchManager;
+import android.app.SearchableInfo;
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
@@ -59,6 +67,24 @@ public class MainActivity extends ActionBarActivity implements
 			findViewById(android.R.id.content).setPadding(0,
 					config.getPixelInsetTop(true), config.getPixelInsetRight(),
 					config.getPixelInsetBottom());
+		}
+
+	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+
+		if (ContactsContract.Intents.SEARCH_SUGGESTION_CLICKED.equals(intent
+				.getAction())) {
+			String displayName = getContactName(intent);
+			NameDialogFragment dialogFrag = (NameDialogFragment) fm
+					.findFragmentByTag("NameDialog");
+			dialogFrag.SetSearchQuery(displayName);
+		} else if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+			// String query = intent.getStringExtra(SearchManager.QUERY);
+			//
+			// TextView tv = (TextView) findViewById(R.id.dialogName);
+			// tv.setText(query);
 		}
 	}
 
@@ -152,6 +178,13 @@ public class MainActivity extends ActionBarActivity implements
 		});
 
 		UpdateNameListFragment();
+
+	}
+
+	@Override
+	public void InitSearchView(SearchView searchView) {
+		// initialize SearchView
+		initSearchView(searchView);
 
 	}
 
@@ -337,6 +370,24 @@ public class MainActivity extends ActionBarActivity implements
 		}
 		win.setAttributes(winParams);
 
+	}
+
+	private void initSearchView(SearchView searchView) {
+		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+		SearchableInfo searchableInfo = searchManager
+				.getSearchableInfo(getComponentName());
+		searchView.setSearchableInfo(searchableInfo);
+	}
+
+	private String getContactName(Intent intent) {
+		Cursor phoneCursor = getContentResolver().query(intent.getData(), null,
+				null, null, null);
+		phoneCursor.moveToFirst();
+		int colNameIndex = phoneCursor
+				.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
+		String contactName = phoneCursor.getString(colNameIndex);
+		phoneCursor.close();
+		return contactName;
 	}
 
 }
