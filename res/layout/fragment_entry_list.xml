@@ -1,4 +1,5 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res/com.nakhbari.calliteven"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -18,4 +19,16 @@
         android:layout_height="match_parent"
         android:text="No data" />
 
-</LinearLayout>
+    <com.nakhbari.calliteven.CircleButton
+        android:id="@+id/entryListFloatingButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|bottom"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="13dp"
+        android:padding="18dp"
+        android:src="@drawable/plus_icon"
+        custom:cb_color="@color/actionbar_background"
+        custom:cb_pressed_ring_width="8dp" />
+
+</FrameLayout>

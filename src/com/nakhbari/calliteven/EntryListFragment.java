@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ArrayAdapter;
@@ -26,12 +27,32 @@ public class EntryListFragment extends ListFragment {
 	private int m_namePosition = 0;
 	private String m_name = "", m_balance = "", m_Owing = "";
 	private EntryListAdapter m_Adapter;
-
+	CircleButton bAddNew;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.fragment_entry_list, container, false);
 
+	}
+
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onViewCreated(view, savedInstanceState);
+
+		 bAddNew = (CircleButton) view
+				.findViewById(R.id.entryListFloatingButton);
+		bAddNew.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				activityCommunicator.AddNewListEntryClicked(m_namePosition);
+
+			}
+
+		});
 	}
 
 	@Override
@@ -64,6 +85,9 @@ public class EntryListFragment extends ListFragment {
 			public void onDestroyActionMode(ActionMode mode) {
 				// TODO Auto-generated method stub
 				m_Adapter.clearSelection();
+
+				// Hide Add Button
+				bAddNew.animate().translationY(0).start();
 			}
 
 			@Override
@@ -73,6 +97,9 @@ public class EntryListFragment extends ListFragment {
 				nr = 0;
 				getActivity().getMenuInflater().inflate(R.menu.contextual_menu,
 						menu);
+				
+				// Hide Add Button
+				bAddNew.animate().translationY(700).start();
 				return true;
 			}
 
@@ -130,22 +157,12 @@ public class EntryListFragment extends ListFragment {
 		setHasOptionsMenu(true);
 		super.onCreate(savedInstanceState);
 	}
-
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		// This function will inflate the actionbar icons
-		inflater.inflate(R.menu.actionbar_entry_list, menu);
-		super.onCreateOptionsMenu(menu, inflater);
-	}
-
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// This function will catch when the actionbar button have been clicked
 		switch (item.getItemId()) {
 
-		case R.id.addEntryItem:
-			activityCommunicator.AddNewListEntryClicked(m_namePosition);
-			break;
 		case android.R.id.home:
 			activityCommunicator.NavigateBackToHome();
 			break;

@@ -92,8 +92,8 @@ public class NameListAdapter extends ArrayAdapter<NameListItem> {
 			holder = (ViewHolder) view.getTag();
 		}
 
-		// Sliding in animation
-		if (position != holder.lastPosition) {
+		// Sliding in animation if its not the same position and the item isn't clicked
+		if (position != holder.lastPosition && mSelection.get(position) == null) {
 			Animation animation = AnimationUtils
 					.loadAnimation(
 							getContext(),

@@ -11,9 +11,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.ListView;
 
@@ -22,12 +21,31 @@ public class NameListFragment extends ListFragment {
 	private ArrayList<NameListItem> m_nameEntry = new ArrayList<NameListItem>();
 	NameListCommunicator activityCommunicator;
 	private NameListAdapter m_Adapter;
+	CircleButton bAddNew;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		return inflater.inflate(R.layout.fragment_name_list, container, false);
+	}
+
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onViewCreated(view, savedInstanceState);
+
+		bAddNew = (CircleButton) view.findViewById(R.id.nameListFloatingButton);
+		bAddNew.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				activityCommunicator.AddNewNameEntryClicked();
+
+			}
+
+		});
 	}
 
 	@Override
@@ -61,6 +79,9 @@ public class NameListFragment extends ListFragment {
 			public void onDestroyActionMode(ActionMode mode) {
 				// TODO Auto-generated method stub
 				m_Adapter.clearSelection();
+
+				// Show Add Button
+				bAddNew.animate().translationY(0).start();
 			}
 
 			@Override
@@ -70,6 +91,9 @@ public class NameListFragment extends ListFragment {
 				nr = 0;
 				getActivity().getMenuInflater().inflate(R.menu.contextual_menu,
 						menu);
+
+				// Hide Add Button
+				bAddNew.animate().translationY(700).start();
 				return true;
 			}
 
@@ -127,36 +151,6 @@ public class NameListFragment extends ListFragment {
 		super.onListItemClick(l, v, position, id);
 
 		activityCommunicator.NameListItemClicked(position);
-	}
-
-	/** ------------------------ Action Bar ------------------------------------ */
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-
-		// Notify the fragment that there is an option menu to inflate
-		setHasOptionsMenu(true);
-
-		super.onCreate(savedInstanceState);
-	}
-
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		// This function will inflate the actionbar icons
-		inflater.inflate(R.menu.actionbar_name_list, menu);
-		super.onCreateOptionsMenu(menu, inflater);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// This function will catch when the actionbar button have been clicked
-
-		switch (item.getItemId()) {
-		case R.id.addNameItem:
-			activityCommunicator.AddNewNameEntryClicked();
-			break;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 
 	/** ----------------------- Activity Functions --------------------------- */

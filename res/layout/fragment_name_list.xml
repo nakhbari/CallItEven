@@ -1,7 +1,8 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res/com.nakhbari.calliteven"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-android:background="#e5e5e5"
+    android:background="#e5e5e5"
     android:orientation="vertical"
     android:windowActionBarOverlay="false"
     android:windowTranslucentStatus="true" >
@@ -13,9 +14,9 @@ android:background="#e5e5e5"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:divider="@null"
-        android:scrollbars="none"
         android:dividerHeight="0dp"
-        android:listSelector="@drawable/list_selector" >
+        android:listSelector="@drawable/list_selector"
+        android:scrollbars="none" >
     </ListView>
 
     <TextView
@@ -24,4 +25,16 @@ android:background="#e5e5e5"
         android:layout_height="match_parent"
         android:text="No data" />
 
-</LinearLayout>
+    <com.nakhbari.calliteven.CircleButton
+        android:id="@+id/nameListFloatingButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|bottom"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="13dp"
+        android:padding="18dp"
+        android:src="@drawable/add_user_icon"
+        custom:cb_color="@color/actionbar_background"
+        custom:cb_pressed_ring_width="8dp" />
+
+</FrameLayout>

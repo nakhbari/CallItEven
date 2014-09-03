@@ -248,6 +248,25 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
         public static final int buttonBarStyle=0x7f010017;
+        /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int cb_color=0x7f01006e;
+        /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int cb_pressed_ring_width=0x7f01006f;
         /**  Specifies a layout for custom navigation. Overrides navigationMode. 
          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
@@ -1150,18 +1169,23 @@ containing a value of this type.
         public static final int abc_textfield_searchview_holo_light=0x7f020054;
         public static final int abc_textfield_searchview_right_holo_dark=0x7f020055;
         public static final int abc_textfield_searchview_right_holo_light=0x7f020056;
-        public static final int card_background=0x7f020057;
-        public static final int custom_button_default=0x7f020058;
-        public static final int custom_button_pressed=0x7f020059;
-        public static final int custom_button_style=0x7f02005a;
-        public static final int custom_spinner_option=0x7f02005b;
-        public static final int divider_line=0x7f02005c;
-        public static final int ic_action_add_person=0x7f02005d;
-        public static final int ic_action_new_event=0x7f02005e;
-        public static final int ic_launcher=0x7f02005f;
-        public static final int list_background_normal=0x7f020060;
-        public static final int list_selector=0x7f020061;
-        public static final int list_selector_pressed=0x7f020062;
+        public static final int add_user_icon=0x7f020057;
+        public static final int card_background=0x7f020058;
+        public static final int custom_button_default=0x7f020059;
+        public static final int custom_button_pressed=0x7f02005a;
+        public static final int custom_button_style=0x7f02005b;
+        public static final int custom_spinner_option=0x7f02005c;
+        public static final int delete_icon=0x7f02005d;
+        public static final int divider_line=0x7f02005e;
+        public static final int ic_action_add_person=0x7f02005f;
+        public static final int ic_action_new_event=0x7f020060;
+        public static final int ic_launcher=0x7f020061;
+        public static final int list_background_normal=0x7f020062;
+        public static final int list_selector=0x7f020063;
+        public static final int list_selector_pressed=0x7f020064;
+        public static final int pencil_icon=0x7f020065;
+        public static final int plus_button_background=0x7f020066;
+        public static final int plus_icon=0x7f020067;
     }
     public static final class id {
         public static final int action_bar=0x7f070025;
@@ -1175,17 +1199,17 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f070016;
         public static final int action_menu_presenter=0x7f070017;
         public static final int action_mode_close_button=0x7f07002d;
-        public static final int action_settings=0x7f070067;
+        public static final int action_settings=0x7f070069;
         public static final int activity_chooser_view_content=0x7f07002e;
-        public static final int addEntryItem=0x7f070063;
-        public static final int addNameItem=0x7f070064;
+        public static final int addEntryItem=0x7f070065;
+        public static final int addNameItem=0x7f070066;
         public static final int always=0x7f07000b;
-        public static final int ampm_hitspace=0x7f07005e;
-        public static final int ampm_label=0x7f07005f;
+        public static final int ampm_hitspace=0x7f070060;
+        public static final int ampm_label=0x7f070061;
         public static final int animator=0x7f070021;
-        public static final int balanceText=0x7f070057;
+        public static final int balanceText=0x7f070059;
         public static final int beginning=0x7f070011;
-        public static final int center_view=0x7f070058;
+        public static final int center_view=0x7f07005a;
         public static final int checkbox=0x7f070036;
         public static final int collapseActionView=0x7f07000d;
         public static final int date_picker_day=0x7f07001f;
@@ -1199,45 +1223,47 @@ containing a value of this type.
         public static final int dialogEntryDate=0x7f070049;
         public static final int dialogEntryPrice=0x7f070048;
         public static final int dialogEntryTitle=0x7f070046;
-        public static final int dialogFirstNameCheckBox=0x7f07004d;
-        public static final int dialogSearch=0x7f07004c;
+        public static final int dialogFirstNameCheckBox=0x7f07004e;
+        public static final int dialogSearch=0x7f07004d;
         public static final int disableHome=0x7f070008;
-        public static final int divLine=0x7f070055;
+        public static final int divLine=0x7f070057;
         public static final int done=0x7f07001a;
-        public static final int done_button=0x7f070062;
+        public static final int done_button=0x7f070064;
         public static final int dropdown=0x7f07000f;
         public static final int edit_query=0x7f070039;
         public static final int end=0x7f070013;
         public static final int entryCancel=0x7f07004b;
-        public static final int entryDate=0x7f070053;
+        public static final int entryDate=0x7f070055;
+        public static final int entryListFloatingButton=0x7f07004c;
         public static final int entryOK=0x7f07004a;
-        public static final int entryPrice=0x7f070052;
-        public static final int entryTitle=0x7f070050;
+        public static final int entryPrice=0x7f070054;
+        public static final int entryTitle=0x7f070052;
         public static final int expand_activities_button=0x7f07002f;
         public static final int expanded_menu=0x7f070035;
         public static final int home=0x7f070014;
         public static final int homeAsUp=0x7f070005;
-        public static final int hour_space=0x7f070059;
-        public static final int hours=0x7f07005b;
+        public static final int hour_space=0x7f07005b;
+        public static final int hours=0x7f07005d;
         public static final int icon=0x7f070033;
         public static final int idFragment=0x7f070045;
         public static final int ifRoom=0x7f07000a;
         public static final int image=0x7f070030;
-        public static final int item_delete=0x7f070066;
-        public static final int item_edit=0x7f070065;
+        public static final int item_delete=0x7f070068;
+        public static final int item_edit=0x7f070067;
         public static final int listMode=0x7f070001;
         public static final int list_item=0x7f070032;
         public static final int middle=0x7f070012;
-        public static final int minutes=0x7f07005d;
-        public static final int minutes_space=0x7f07005c;
+        public static final int minutes=0x7f07005f;
+        public static final int minutes_space=0x7f07005e;
         public static final int month_text_view=0x7f070022;
-        public static final int nameCancel=0x7f07004f;
-        public static final int nameOK=0x7f07004e;
-        public static final int nameText=0x7f070054;
+        public static final int nameCancel=0x7f070050;
+        public static final int nameListFloatingButton=0x7f070051;
+        public static final int nameOK=0x7f07004f;
+        public static final int nameText=0x7f070056;
         public static final int never=0x7f070009;
         public static final int none=0x7f070010;
         public static final int normal=0x7f070000;
-        public static final int owingText=0x7f070056;
+        public static final int owingText=0x7f070058;
         public static final int progress_circular=0x7f070018;
         public static final int progress_horizontal=0x7f070019;
         public static final int radio=0x7f070038;
@@ -1251,7 +1277,7 @@ containing a value of this type.
         public static final int search_plate=0x7f07003f;
         public static final int search_src_text=0x7f070040;
         public static final int search_voice_btn=0x7f070044;
-        public static final int separator=0x7f07005a;
+        public static final int separator=0x7f07005c;
         public static final int shortcut=0x7f070037;
         public static final int showCustom=0x7f070007;
         public static final int showHome=0x7f070004;
@@ -1260,11 +1286,11 @@ containing a value of this type.
         public static final int split_action_bar=0x7f070027;
         public static final int submit_area=0x7f070042;
         public static final int tabMode=0x7f070002;
-        public static final int time_picker=0x7f070061;
-        public static final int time_picker_dialog=0x7f070060;
+        public static final int time_picker=0x7f070063;
+        public static final int time_picker_dialog=0x7f070062;
         public static final int title=0x7f070034;
         public static final int top_action_bar=0x7f070029;
-        public static final int tvWhoPaidEntry=0x7f070051;
+        public static final int tvWhoPaidEntry=0x7f070053;
         public static final int up=0x7f07002a;
         public static final int useLogo=0x7f070003;
         public static final int withText=0x7f07000c;
@@ -2391,6 +2417,52 @@ containing a value of this type.
           @attr name com.nakhbari.calliteven:initialActivityCount
         */
         public static final int ActivityChooserView_initialActivityCount = 0;
+        /** Attributes that can be used with a CircleButton.
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #CircleButton_cb_color com.nakhbari.calliteven:cb_color}</code></td><td></td></tr>
+           <tr><td><code>{@link #CircleButton_cb_pressed_ring_width com.nakhbari.calliteven:cb_pressed_ring_width}</code></td><td></td></tr>
+           </table>
+           @see #CircleButton_cb_color
+           @see #CircleButton_cb_pressed_ring_width
+         */
+        public static final int[] CircleButton = {
+            0x7f01006e, 0x7f01006f
+        };
+        /**
+          <p>This symbol is the offset where the {@link com.nakhbari.calliteven.R.attr#cb_color}
+          attribute's value can be found in the {@link #CircleButton} array.
+
+
+          <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.nakhbari.calliteven:cb_color
+        */
+        public static final int CircleButton_cb_color = 0;
+        /**
+          <p>This symbol is the offset where the {@link com.nakhbari.calliteven.R.attr#cb_pressed_ring_width}
+          attribute's value can be found in the {@link #CircleButton} array.
+
+
+          <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.nakhbari.calliteven:cb_pressed_ring_width
+        */
+        public static final int CircleButton_cb_pressed_ring_width = 1;
         /** Attributes that can be used with a CompatTextView.
            <p>Includes the following attributes:</p>
            <table>
