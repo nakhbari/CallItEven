@@ -10,6 +10,7 @@ import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -93,17 +94,23 @@ public class EntryDialogFragment extends DialogFragment implements
 
 		// Set the edit texts within the Dialog, if the entry item is filled out
 		if (entryItem != null && etTitle != null && etPrice != null
-				&& dateButton != null && !(entryItem.getTitle() == "default")) {
-			etTitle.setText(entryItem.getTitle());
-			etTitle.setSelection(entryItem.getTitle().length());
-			etPrice.setText(Long.toString(entryItem.getPrice()));
-			dateButton.setText(GetStringFromCalendar(entryItem.getCalendar()));
-			
-		}
-		else{
+				&& dateButton != null) {
 
-			final Calendar calendar = Calendar.getInstance();
-			dateButton.setText(GetStringFromCalendar(calendar));	
+			etTitle.requestFocus();
+			etTitle.requestFocusFromTouch();
+
+			if (!(entryItem.getTitle() == "default")) {
+				etTitle.setText(entryItem.getTitle());
+				etTitle.setSelection(entryItem.getTitle().length());
+				etPrice.setText(Long.toString(entryItem.getPrice()));
+				dateButton.setText(GetStringFromCalendar(entryItem
+						.getCalendar()));
+
+			} else {
+
+				final Calendar calendar = Calendar.getInstance();
+				dateButton.setText(GetStringFromCalendar(calendar));
+			}
 		}
 		// Listen for clicks
 		if (yesButton != null) {
@@ -151,7 +158,8 @@ public class EntryDialogFragment extends DialogFragment implements
 				}
 
 				// Send data to the fragment
-				activityCommunicator.SendEntryItemData(entryItem, namePosition, entryPosition);
+				activityCommunicator.SendEntryItemData(entryItem, namePosition,
+						entryPosition);
 
 				dismiss();
 			}
@@ -220,7 +228,8 @@ public class EntryDialogFragment extends DialogFragment implements
 	}
 
 	public interface EntryDialogCommunicator {
-		public void SendEntryItemData(EntryListItem item, int namePosition, int entryPosition);
+		public void SendEntryItemData(EntryListItem item, int namePosition,
+				int entryPosition);
 	}
 
 }
