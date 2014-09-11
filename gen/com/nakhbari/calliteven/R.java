@@ -1177,15 +1177,18 @@ containing a value of this type.
         public static final int custom_spinner_option=0x7f02005c;
         public static final int delete_icon=0x7f02005d;
         public static final int divider_line=0x7f02005e;
-        public static final int ic_action_add_person=0x7f02005f;
-        public static final int ic_action_new_event=0x7f020060;
-        public static final int ic_launcher=0x7f020061;
-        public static final int list_background_normal=0x7f020062;
-        public static final int list_selector=0x7f020063;
-        public static final int list_selector_pressed=0x7f020064;
-        public static final int pencil_icon=0x7f020065;
-        public static final int plus_button_background=0x7f020066;
-        public static final int plus_icon=0x7f020067;
+        public static final int empty_item_list_background=0x7f02005f;
+        public static final int empty_name_list_background=0x7f020060;
+        public static final int ic_action_add_person=0x7f020061;
+        public static final int ic_action_new_event=0x7f020062;
+        public static final int ic_actionbar_handshake=0x7f020063;
+        public static final int ic_launcher=0x7f020064;
+        public static final int list_background_normal=0x7f020065;
+        public static final int list_selector=0x7f020066;
+        public static final int list_selector_pressed=0x7f020067;
+        public static final int pencil_icon=0x7f020068;
+        public static final int plus_button_background=0x7f020069;
+        public static final int plus_icon=0x7f02006a;
     }
     public static final class id {
         public static final int action_bar=0x7f070025;

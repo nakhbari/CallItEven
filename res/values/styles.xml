@@ -24,6 +24,7 @@
     <!-- ActionBar styles -->
     <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@color/actionbar_background</item>
+        <item name="android:logo">@drawable/ic_actionbar_handshake</item>
     </style>
 
 

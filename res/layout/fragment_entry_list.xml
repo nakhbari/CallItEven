@@ -12,12 +12,11 @@
         android:layout_height="match_parent"
         android:listSelector="@drawable/list_selector" >
     </ListView>
-
-    <TextView
+<ImageView
         android:id="@android:id/empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="No data" />
+        android:src="@drawable/empty_item_list_background" />
 
     <com.nakhbari.calliteven.CircleButton
         android:id="@+id/entryListFloatingButton"
