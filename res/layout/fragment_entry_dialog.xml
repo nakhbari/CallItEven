@@ -48,7 +48,7 @@
             android:layout_gravity="left|center"
             android:layout_weight="1"
             android:hint="Price ($)"
-            android:inputType="number"
+            android:inputType="number|numberDecimal"
             android:singleLine="true" />
     </LinearLayout>
 

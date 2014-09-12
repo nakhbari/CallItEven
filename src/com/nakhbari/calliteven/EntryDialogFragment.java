@@ -22,8 +22,8 @@ import com.fourmob.datetimepicker.date.DatePickerDialog.OnDateSetListener;
 public class EntryDialogFragment extends DialogFragment implements
 		View.OnClickListener, OnDateSetListener {
 
-	private static long MAX_PRICE = 20000000;
-	private static long MIN_PRICE = 0;
+	private static int NUM_DIGITS_BEFORE_DECIMAL = 10;
+	private static int NUM_DIGITS_AFTER_DECIMAL = 2;
 
 	EntryDialogCommunicator activityCommunicator;
 	int namePosition = 0;
@@ -83,8 +83,7 @@ public class EntryDialogFragment extends DialogFragment implements
 
 		etTitle = (EditText) view.findViewById(R.id.dialogEntryTitle);
 		etPrice = (EditText) view.findViewById(R.id.dialogEntryPrice);
-		etPrice.setFilters(new InputFilter[] { new InputFilterPriceNumber(
-				MIN_PRICE, MAX_PRICE) });
+		etPrice.setFilters(new InputFilter[] { new InputFilterPriceNumber(".") });
 		spWhoPaid = (Spinner) view.findViewById(R.id.spWhoPaid);
 
 		// Find the yes and cancel buttons in the dialog
@@ -102,7 +101,7 @@ public class EntryDialogFragment extends DialogFragment implements
 			if (!(entryItem.getTitle() == "default")) {
 				etTitle.setText(entryItem.getTitle());
 				etTitle.setSelection(entryItem.getTitle().length());
-				etPrice.setText(Long.toString(entryItem.getPrice()));
+				etPrice.setText(Double.toString(entryItem.getPrice()));
 				dateButton.setText(GetStringFromCalendar(entryItem
 						.getCalendar()));
 
@@ -147,14 +146,14 @@ public class EntryDialogFragment extends DialogFragment implements
 
 				if (spWhoPaid.getSelectedItemPosition() == 0) {
 
-					entryItem.setPrice(Long.parseLong(etPrice.getText()
+					entryItem.setPrice(Double.parseDouble(etPrice.getText()
 							.toString()));
 
 				} else {
 					// Then the other person paid and we need to made the
 					// price negative
 					entryItem.setPrice((-1)
-							* Integer.parseInt(etPrice.getText().toString()));
+							* Double.parseDouble(etPrice.getText().toString()));
 				}
 
 				// Send data to the fragment

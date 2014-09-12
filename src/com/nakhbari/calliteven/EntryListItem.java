@@ -5,12 +5,12 @@ import java.util.Calendar;
 public class EntryListItem {
 
 	private String title;
-	private long price;
+	private Double price;
 	private Calendar calendar;
 
 	public EntryListItem() {
 		this.title = "default";
-		this.price = 0;
+		this.price = 0.0;
 		this.calendar = Calendar.getInstance();
 	}
 
@@ -18,7 +18,7 @@ public class EntryListItem {
 		return title;
 	}
 
-	public long getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
@@ -30,7 +30,7 @@ public class EntryListItem {
 		this.title = name;
 	}
 
-	public void setPrice(long price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 

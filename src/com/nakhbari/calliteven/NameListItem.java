@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class NameListItem {
 	private String name;
-	private long balance;
+	private double balance;
 	private ArrayList<EntryListItem> entryArray;
 
 	public NameListItem() {
@@ -21,11 +21,11 @@ public class NameListItem {
 		this.name = name;
 	}
 
-	public long getBalance() {
+	public double getBalance() {
 		return balance;
 	}
 
-	public void setBalance(long balance) {
+	public void setBalance(double balance) {
 		this.balance = balance;
 	}
 	

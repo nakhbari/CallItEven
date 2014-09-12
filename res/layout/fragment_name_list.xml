@@ -15,8 +15,7 @@
         android:layout_marginRight="10dp"
         android:divider="@null"
         android:dividerHeight="0dp"
-        android:listSelector="@drawable/list_selector"
-        android:scrollbars="none" >
+        android:listSelector="@drawable/list_selector" >
     </ListView>
 
     <ImageView

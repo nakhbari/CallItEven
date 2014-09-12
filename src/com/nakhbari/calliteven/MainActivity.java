@@ -19,11 +19,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.util.SparseBooleanArray;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
@@ -270,7 +268,7 @@ public class MainActivity extends ActionBarActivity implements
 	/** ----------------------------- Functions ------------------------------ */
 	private void CalculateBalance(int namePosition) {
 		// Calculate how much the person is owed, from the sum of entries
-		int balanceSum = 0;
+		double balanceSum = 0.0;
 
 		for (int i = 0; i < m_nameEntry.get(namePosition).getEntryArray()
 				.size(); i++) {
@@ -309,52 +307,60 @@ public class MainActivity extends ActionBarActivity implements
 
 			final int position = checkedItems.keyAt(i);
 
-			int positionOnScreen = position
-					- listView.getFirstVisiblePosition();
+//			int positionOnScreen = position
+//					- listView.getFirstVisiblePosition();
+//
+//			// check if the item is visible
+//			if (positionOnScreen >= 0
+//					&& positionOnScreen < listView.getChildCount()) {
+//				// if the item is visible, then animate a fadeout
+//				final View view = listView.getChildAt(positionOnScreen);
+//				view.animate().alpha(0).setDuration(300)
+//						.withEndAction(new Runnable() {
+//
+//							@Override
+//							public void run() {
+//								// TODO Auto-generated method stub
+//								view.setAlpha(1);
+//
+//								if (nameListPosition == -1) {
+//
+//									m_nameEntry.remove(position);
+//									UpdateNameListFragment();
+//								} else {
+//									m_nameEntry.get(nameListPosition)
+//											.getEntryArray().remove(position);
+//									UpdateEntryListFragment(nameListPosition,
+//											true);
+//								}
+//							}
+//
+//						}).start();
+//			} else {
+//				listView.postDelayed(new Runnable() {
+//					@Override
+//					public void run() {
+//						if (nameListPosition == -1) {
+//
+//							m_nameEntry.remove(position);
+//							UpdateNameListFragment();
+//						} else {
+//							m_nameEntry.get(nameListPosition).getEntryArray()
+//									.remove(position);
+//							UpdateEntryListFragment(nameListPosition, true);
+//						}
+//					}
+//				}, 350);
+//			}
+			if (nameListPosition == -1) {
 
-			// check if the item is visible
-			if (positionOnScreen >= 0
-					&& positionOnScreen < listView.getChildCount()) {
-				// if the item is visible, then animate a fadeout
-				final View view = listView.getChildAt(positionOnScreen);
-				view.animate().alpha(0).setDuration(300)
-						.withEndAction(new Runnable() {
-
-							@Override
-							public void run() {
-								// TODO Auto-generated method stub
-								view.setAlpha(1);
-
-								if (nameListPosition == -1) {
-
-									m_nameEntry.remove(position);
-									UpdateNameListFragment();
-								} else {
-									m_nameEntry.get(nameListPosition)
-											.getEntryArray().remove(position);
-									UpdateEntryListFragment(nameListPosition,
-											true);
-								}
-							}
-
-						}).start();
+				m_nameEntry.remove(position);
+				UpdateNameListFragment();
 			} else {
-				listView.postDelayed(new Runnable() {
-					@Override
-					public void run() {
-						if (nameListPosition == -1) {
-
-							m_nameEntry.remove(position);
-							UpdateNameListFragment();
-						} else {
-							m_nameEntry.get(nameListPosition).getEntryArray()
-									.remove(position);
-							UpdateEntryListFragment(nameListPosition, true);
-						}
-					}
-				}, 350);
+				m_nameEntry.get(nameListPosition).getEntryArray()
+						.remove(position);
+				UpdateEntryListFragment(nameListPosition, true);
 			}
-
 		}
 	}
 

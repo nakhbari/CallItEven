@@ -9,17 +9,12 @@ import android.support.v4.app.ListFragment;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.view.ViewGroup;
 import android.widget.AbsListView.MultiChoiceModeListener;
+import android.widget.ListView;
 
 public class EntryListFragment extends ListFragment {
 	EntryListCommunicator activityCommunicator;
@@ -28,7 +23,7 @@ public class EntryListFragment extends ListFragment {
 	private String m_name = "", m_balance = "", m_Owing = "";
 	private EntryListAdapter m_Adapter;
 	CircleButton bAddNew;
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -41,7 +36,7 @@ public class EntryListFragment extends ListFragment {
 		// TODO Auto-generated method stub
 		super.onViewCreated(view, savedInstanceState);
 
-		 bAddNew = (CircleButton) view
+		bAddNew = (CircleButton) view
 				.findViewById(R.id.entryListFloatingButton);
 		bAddNew.setOnClickListener(new OnClickListener() {
 
@@ -97,7 +92,7 @@ public class EntryListFragment extends ListFragment {
 				nr = 0;
 				getActivity().getMenuInflater().inflate(R.menu.contextual_menu,
 						menu);
-				
+
 				// Hide Add Button
 				bAddNew.animate().translationY(700).start();
 				return true;
@@ -157,7 +152,7 @@ public class EntryListFragment extends ListFragment {
 		setHasOptionsMenu(true);
 		super.onCreate(savedInstanceState);
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// This function will catch when the actionbar button have been clicked
@@ -176,6 +171,15 @@ public class EntryListFragment extends ListFragment {
 
 		ActionBar actionBar = getActivity().getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(false);
+
+		super.onPause();
+	}
+
+	@Override
+	public void onResume() {
+
+		ActionBar actionBar = getActivity().getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
 
 		super.onPause();
 	}

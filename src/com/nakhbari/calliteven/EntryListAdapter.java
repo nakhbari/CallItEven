@@ -152,7 +152,7 @@ public class EntryListAdapter extends ArrayAdapter<EntryListItem> {
 				}
 
 				holder.price.setText("$"
-						+ Long.toString(Math.abs(entryItem.getPrice())));
+						+ FormatDoubleToString(Math.abs(entryItem.getPrice())));
 
 			}
 
@@ -167,5 +167,12 @@ public class EntryListAdapter extends ArrayAdapter<EntryListItem> {
 		// Return the view to the activity
 		return view;
 
+	}
+
+	public static String FormatDoubleToString(double d) {
+		if (d == (int) d)
+			return String.format("%d", (int) d);
+		else
+			return String.format("%d", d);
 	}
 }

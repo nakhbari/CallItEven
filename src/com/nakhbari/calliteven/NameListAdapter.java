@@ -92,7 +92,8 @@ public class NameListAdapter extends ArrayAdapter<NameListItem> {
 			holder = (ViewHolder) view.getTag();
 		}
 
-		// Sliding in animation if its not the same position and the item isn't clicked
+		// Sliding in animation if its not the same position and the item isn't
+		// clicked
 		if (position != holder.lastPosition && mSelection.get(position) == null) {
 			Animation animation = AnimationUtils
 					.loadAnimation(
@@ -141,13 +142,13 @@ public class NameListAdapter extends ArrayAdapter<NameListItem> {
 				if (i.getBalance() < 0) {
 					holder.owesWho.setText("Is Owed");
 					holder.balance.setText("$"
-							+ Long.toString(Math.abs(i.getBalance())));
+							+ FormatDoubleToString(Math.abs(i.getBalance())));
 
 				} else if (i.getBalance() > 0) {
 
 					holder.owesWho.setText("Owes You");
 					holder.balance.setText("$"
-							+ Long.toString(Math.abs(i.getBalance())));
+							+ FormatDoubleToString(Math.abs(i.getBalance())));
 
 				} else {
 
@@ -163,4 +164,10 @@ public class NameListAdapter extends ArrayAdapter<NameListItem> {
 
 	}
 
+	public static String FormatDoubleToString(double d) {
+		if (d == (int) d)
+			return String.format("%d", (int) d);
+		else
+			return String.format("%d", d);
+	}
 }
