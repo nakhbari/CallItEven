@@ -161,6 +161,17 @@ public class EntryListAdapter extends ArrayAdapter<EntryListItem> {
 						.getTime()).toString()));
 
 			}
+			
+			// Check to see if the item has any monetary value or is it 
+			// just an item
+			if(entryItem.isItemMonetary())
+			{
+				holder.price.setVisibility(View.VISIBLE);
+				holder.whoPaid.setVisibility(View.VISIBLE);
+			}else{
+				holder.price.setVisibility(View.INVISIBLE);
+				holder.whoPaid.setVisibility(View.INVISIBLE);
+			}
 
 		}
 

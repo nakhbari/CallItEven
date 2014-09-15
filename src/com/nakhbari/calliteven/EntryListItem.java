@@ -7,11 +7,13 @@ public class EntryListItem {
 	private String title;
 	private Double price;
 	private Calendar calendar;
+	private boolean isItemMonetary;
 
 	public EntryListItem() {
 		this.title = "default";
 		this.price = 0.0;
 		this.calendar = Calendar.getInstance();
+		isItemMonetary = true;
 	}
 
 	public String getTitle() {
@@ -36,5 +38,14 @@ public class EntryListItem {
 
 	public void setCalendar(Calendar cal) {
 		this.calendar = cal;
+	}
+	
+	public boolean isItemMonetary(){
+		return isItemMonetary;
+	}
+	
+	public void setItemMonetary(boolean isMonetary)
+	{
+		isItemMonetary = isMonetary;
 	}
 }

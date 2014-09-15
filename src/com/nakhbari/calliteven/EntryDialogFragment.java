@@ -4,16 +4,21 @@ import java.text.DateFormat;
 import java.util.Calendar;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fourmob.datetimepicker.date.DatePickerDialog;
@@ -33,6 +38,7 @@ public class EntryDialogFragment extends DialogFragment implements
 	EditText etPrice;
 	Button dateButton;
 	Spinner spWhoPaid;
+	CheckBox cbIsThereMonetaryValue;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -77,6 +83,12 @@ public class EntryDialogFragment extends DialogFragment implements
 		return view;
 	}
 
+	@Override
+	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+
+		super.onViewCreated(view, savedInstanceState);
+	}
+
 	/** ----------------------- Functions -------------------------------------- */
 
 	private void initializeDialog(View view) {
@@ -85,6 +97,8 @@ public class EntryDialogFragment extends DialogFragment implements
 		etPrice = (EditText) view.findViewById(R.id.dialogEntryPrice);
 		etPrice.setFilters(new InputFilter[] { new InputFilterPriceNumber(".") });
 		spWhoPaid = (Spinner) view.findViewById(R.id.spWhoPaid);
+		cbIsThereMonetaryValue = (CheckBox) view
+				.findViewById(R.id.cbMonetaryValue);
 
 		// Find the yes and cancel buttons in the dialog
 		Button yesButton = (Button) view.findViewById(R.id.entryOK);
@@ -110,6 +124,7 @@ public class EntryDialogFragment extends DialogFragment implements
 				final Calendar calendar = Calendar.getInstance();
 				dateButton.setText(GetStringFromCalendar(calendar));
 			}
+
 		}
 		// Listen for clicks
 		if (yesButton != null) {
@@ -124,6 +139,32 @@ public class EntryDialogFragment extends DialogFragment implements
 
 			dateButton.setOnClickListener(this);
 		}
+		if (cbIsThereMonetaryValue != null) {
+			cbIsThereMonetaryValue
+					.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+						@Override
+						public void onCheckedChanged(CompoundButton buttonView,
+								boolean isChecked) {
+							if (isChecked) {
+								etPrice.setEnabled(true);
+								etPrice.setTextColor(Color.BLACK);
+
+								spWhoPaid.setEnabled(true);
+								((TextView) spWhoPaid.getChildAt(0))
+										.setTextColor(Color.BLACK);
+							} else {
+								etPrice.setEnabled(false);
+								etPrice.setTextColor(Color.LTGRAY);
+
+								spWhoPaid.setEnabled(false);
+								((TextView) spWhoPaid.getChildAt(0))
+										.setTextColor(Color.LTGRAY);
+							}
+
+						}
+					});
+		}
 
 	}
 
@@ -136,7 +177,8 @@ public class EntryDialogFragment extends DialogFragment implements
 			if (etTitle.getText().toString().length() == 0) {
 				Toast.makeText(getActivity(), "Enter Title", Toast.LENGTH_SHORT)
 						.show();
-			} else if (etPrice.getText().toString().length() == 0) {
+			} else if (cbIsThereMonetaryValue.isChecked()
+					&& etPrice.getText().toString().length() == 0) {
 
 				Toast.makeText(getActivity(), "Enter Price", Toast.LENGTH_SHORT)
 						.show();
@@ -144,17 +186,23 @@ public class EntryDialogFragment extends DialogFragment implements
 				// fill in the entrylistitem with the dialog data
 				entryItem.setTitle(etTitle.getText().toString().trim());
 
-				if (spWhoPaid.getSelectedItemPosition() == 0) {
+				// If there is a monetary value, then set it in the entry item
+				if (cbIsThereMonetaryValue.isChecked()) {
+					if (spWhoPaid.getSelectedItemPosition() == 0) {
 
-					entryItem.setPrice(Double.parseDouble(etPrice.getText()
-							.toString()));
+						entryItem.setPrice(Double.parseDouble(etPrice.getText()
+								.toString()));
 
-				} else {
-					// Then the other person paid and we need to made the
-					// price negative
-					entryItem.setPrice((-1)
-							* Double.parseDouble(etPrice.getText().toString()));
+					} else {
+						// Then the other person paid and we need to made the
+						// price negative
+						entryItem.setPrice((-1)
+								* Double.parseDouble(etPrice.getText()
+										.toString()));
+					}
 				}
+
+				entryItem.setItemMonetary(cbIsThereMonetaryValue.isChecked());
 
 				// Send data to the fragment
 				activityCommunicator.SendEntryItemData(entryItem, namePosition,
