@@ -1,28 +1,38 @@
 package com.nakhbari.calliteven;
 
-import com.nakhbari.calliteven.NameListFragment.NameListCommunicator;
-
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.SearchView.SearchAutoComplete;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 public class NameDialogFragment extends DialogFragment implements
 		View.OnClickListener {
+
+	static class ViewHolder {
+		SearchView svName;
+		CheckBox cbFirstName;
+	}
+
 	NameListItem nameListItem;
-	EditText etName;
+	ViewHolder holder = new ViewHolder();
 	NameDialogCommunicator activityCommunicator;
+	int namePos = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+
 		setStyle(DialogFragment.STYLE_NO_TITLE, DialogFragment.STYLE_NORMAL);
+
 	}
 
 	@Override
@@ -62,14 +72,37 @@ public class NameDialogFragment extends DialogFragment implements
 		return view;
 	}
 
+	@Override
+	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onViewCreated(view, savedInstanceState);
+
+		activityCommunicator.InitSearchView((SearchView) view
+				.findViewById(R.id.dialogSearch));
+	}
+
 	private void initializeDialog(View view) {
 
-		etName = (EditText) view.findViewById(R.id.dialogName);
+		holder.svName = (SearchView) view.findViewById(R.id.dialogSearch);
+		holder.cbFirstName = (CheckBox) view.findViewById(R.id.dialogFirstNameCheckBox);
 
 		// Set the edit texts within the Dialog, if the Name item is filled out
-		if (etName != null && !(nameListItem.getName() == "default")) {
+		if (holder.svName != null) {
 
-			etName.setText(nameListItem.getName());
+			if (!(nameListItem.getName() == "default")) {
+
+				holder.svName.setQuery(nameListItem.getName(), false);
+			}
+			
+			 // Theme the SearchView's AutoCompleteTextView drop down. 
+		    SearchAutoComplete autoCompleteTextView = (SearchAutoComplete) holder.svName.findViewById(R.id.search_src_text);
+
+		    if (autoCompleteTextView != null) { 
+		        autoCompleteTextView.setDropDownBackgroundResource(R.drawable.abc_search_dropdown_light);
+		    }
+		    
+			holder.svName.setIconified(false);
+			holder.svName.requestFocus();
 		}
 
 		// Find the yes and cancel buttons in the dialog
@@ -93,12 +126,19 @@ public class NameDialogFragment extends DialogFragment implements
 
 		// Gets called when an item is clicked
 		if (v.getId() == R.id.nameOK) {
-			if (etName.getText().toString().length() > 0) {
+			if (holder.svName.getQuery().toString().length() > 0) {
+
 				// fill in the namelistitem with the dialog data
-				nameListItem.setName(etName.getText().toString().trim());
+
+				String name = holder.svName.getQuery().toString().trim();
+
+				if (holder.cbFirstName.isChecked()) {
+					name = name.split(" ", 2)[0];
+				}
+				nameListItem.setName(name);
 
 				// Send data to the fragment
-				activityCommunicator.SendNewNameData(nameListItem);
+				activityCommunicator.SendNameData(nameListItem, namePos);
 
 				dismiss();
 			} else {
@@ -114,8 +154,17 @@ public class NameDialogFragment extends DialogFragment implements
 
 	/** ----------------------- Activity Callbacks --------------------------- */
 
-	public void SetNameListItem(NameListItem item) {
+	public void SetNameListItem(NameListItem item, int position) {
 		nameListItem = item;
+		namePos = position;
+	}
+
+	public void SetSearchQuery(String str) {
+		if (holder.svName != null) {
+
+			holder.svName.setQuery(str, false);
+			holder.svName.clearFocus();
+		}
 	}
 
 	/** ----------------------- Activity Interface --------------------------- */
@@ -133,6 +182,8 @@ public class NameDialogFragment extends DialogFragment implements
 	}
 
 	public interface NameDialogCommunicator {
-		public void SendNewNameData(NameListItem item);
+		public void SendNameData(NameListItem item, int position);
+
+		public void InitSearchView(SearchView searchView);
 	}
 }

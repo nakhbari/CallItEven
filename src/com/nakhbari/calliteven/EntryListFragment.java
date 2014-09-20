@@ -6,20 +6,23 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
+import android.widget.AbsListView.MultiChoiceModeListener;
+import android.widget.ListView;
 
 public class EntryListFragment extends ListFragment {
 	EntryListCommunicator activityCommunicator;
 	private ArrayList<EntryListItem> m_entries = new ArrayList<EntryListItem>();
 	private int m_namePosition = 0;
 	private String m_name = "", m_balance = "", m_Owing = "";
+	private EntryListAdapter m_Adapter;
+	CircleButton bAddNew;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,14 +32,115 @@ public class EntryListFragment extends ListFragment {
 	}
 
 	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onViewCreated(view, savedInstanceState);
+
+		bAddNew = (CircleButton) view
+				.findViewById(R.id.entryListFloatingButton);
+		bAddNew.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				activityCommunicator.AddNewListEntryClicked(m_namePosition);
+
+			}
+
+		});
+	}
+
+	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
 		// Setting the custom adapter which will handle the inflation of the
 		// individual rows.
-		EntryListAdapter adapter = new EntryListAdapter(getActivity(),
+		m_Adapter = new EntryListAdapter(getActivity(),
 				R.layout.row_entry_list, m_entries);
-		setListAdapter(adapter);
+		setListAdapter(m_Adapter);
+
+		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+
+		getListView().setMultiChoiceModeListener(new MultiChoiceModeListener() {
+			private int nr = 0;
+
+			@Override
+			public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+				if (nr == 1) {
+					menu.findItem(R.id.item_edit).setVisible(true);
+				} else {
+
+					menu.findItem(R.id.item_edit).setVisible(false);
+				}
+				return false;
+			}
+
+			@Override
+			public void onDestroyActionMode(ActionMode mode) {
+				// TODO Auto-generated method stub
+				m_Adapter.clearSelection();
+
+				// Hide Add Button
+				bAddNew.animate().translationY(0).start();
+			}
+
+			@Override
+			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+				// TODO Auto-generated method stub
+
+				nr = 0;
+				getActivity().getMenuInflater().inflate(R.menu.contextual_menu,
+						menu);
+
+				// Hide Add Button
+				bAddNew.animate().translationY(700).start();
+				return true;
+			}
+
+			@Override
+			public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+				// TODO Auto-generated method stub
+				switch (item.getItemId()) {
+
+				case R.id.item_delete:
+					nr = 0;
+					activityCommunicator.RemoveCheckedEntryListItems(
+							getListView(), m_namePosition);
+					m_Adapter.clearSelection();
+					mode.finish();
+					break;
+
+				case R.id.item_edit:
+					int pos = m_Adapter.getCurrentCheckedPosition();
+					if (pos >= 0) {
+
+						activityCommunicator.EditEntryItem(m_namePosition, pos);
+					}
+
+					m_Adapter.clearSelection();
+					mode.finish();
+					break;
+				}
+				return false;
+			}
+
+			@Override
+			public void onItemCheckedStateChanged(ActionMode mode,
+					int position, long id, boolean checked) {
+				// TODO Auto-generated method stub
+				if (checked) {
+					nr++;
+					m_Adapter.setNewSelection(position, checked);
+
+				} else {
+					nr--;
+					m_Adapter.removeSelection(position);
+				}
+				mode.setTitle(nr + " selected");
+				mode.invalidate();
+			}
+		});
 
 	}
 
@@ -50,20 +154,10 @@ public class EntryListFragment extends ListFragment {
 	}
 
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		// This function will inflate the actionbar icons
-		inflater.inflate(R.menu.actionbar_entry_list, menu);
-		super.onCreateOptionsMenu(menu, inflater);
-	}
-
-	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// This function will catch when the actionbar button have been clicked
 		switch (item.getItemId()) {
 
-		case R.id.addEntryItem:
-			activityCommunicator.AddNewListEntryClicked(m_namePosition);
-			break;
 		case android.R.id.home:
 			activityCommunicator.NavigateBackToHome();
 			break;
@@ -77,6 +171,15 @@ public class EntryListFragment extends ListFragment {
 
 		ActionBar actionBar = getActivity().getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(false);
+
+		super.onPause();
+	}
+
+	@Override
+	public void onResume() {
+
+		ActionBar actionBar = getActivity().getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
 
 		super.onPause();
 	}
@@ -111,6 +214,11 @@ public class EntryListFragment extends ListFragment {
 	public interface EntryListCommunicator {
 		public void AddNewListEntryClicked(int namePosition);
 
+		public void EditEntryItem(int namePosition, int entryPosition);
+
 		public void NavigateBackToHome();
+
+		public void RemoveCheckedEntryListItems(ListView listView,
+				int nameListPosition);
 	}
 }

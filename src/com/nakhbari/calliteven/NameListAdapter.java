@@ -1,11 +1,15 @@
 package com.nakhbari.calliteven;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
@@ -13,6 +17,36 @@ public class NameListAdapter extends ArrayAdapter<NameListItem> {
 
 	// List of names
 	private ArrayList<NameListItem> objects;
+	private HashMap<Integer, Boolean> mSelection = new HashMap<Integer, Boolean>();
+
+	public void setNewSelection(int position, boolean value) {
+		mSelection.put(position, value);
+		notifyDataSetChanged();
+	}
+
+	public boolean isPositionChecked(int position) {
+		Boolean result = mSelection.get(position);
+		return result == null ? false : result;
+	}
+
+	public int getCurrentCheckedPosition() {
+		Set<Integer> i = mSelection.keySet();
+		if (!i.isEmpty()) {
+			return i.iterator().next();
+		}
+
+		return -1;
+	}
+
+	public void removeSelection(int position) {
+		mSelection.remove(position);
+		notifyDataSetChanged();
+	}
+
+	public void clearSelection() {
+		mSelection = new HashMap<Integer, Boolean>();
+		notifyDataSetChanged();
+	}
 
 	/*
 	 * here we must override the constructor for ArrayAdapter the only variable
@@ -25,11 +59,21 @@ public class NameListAdapter extends ArrayAdapter<NameListItem> {
 		this.objects = objects;
 	}
 
+	static class ViewHolder {
+		TextView name;
+		TextView owesWho;
+		TextView balance;
+		int lastPosition;
+	}
+
 	/*
 	 * we are overriding the getView method here - this is what defines how each
 	 * list item will look.
 	 */
 	public View getView(int position, View convertView, ViewGroup parent) {
+
+		// Create a new viewholder to store data
+		ViewHolder holder = new ViewHolder();
 
 		// assign the view we are converting to a local variable
 		View view = convertView;
@@ -39,7 +83,25 @@ public class NameListAdapter extends ArrayAdapter<NameListItem> {
 		if (view == null) {
 			LayoutInflater inflater = (LayoutInflater) getContext()
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			view = inflater.inflate(R.layout.row_name_list, null);
+			view = inflater.inflate(R.layout.row_name_list, parent, false);
+			holder.name = (TextView) view.findViewById(R.id.nameText);
+			holder.owesWho = (TextView) view.findViewById(R.id.owingText);
+			holder.balance = (TextView) view.findViewById(R.id.balanceText);
+			view.setTag(holder);
+		} else {
+			holder = (ViewHolder) view.getTag();
+		}
+
+		// Sliding in animation if its not the same position and the item isn't
+		// clicked
+		if (position != holder.lastPosition && mSelection.get(position) == null) {
+			Animation animation = AnimationUtils
+					.loadAnimation(
+							getContext(),
+							(position > holder.lastPosition) ? R.animator.up_from_bottom
+									: R.animator.down_from_top);
+			view.startAnimation(animation);
+			holder.lastPosition = position;
 		}
 
 		/*
@@ -50,36 +112,48 @@ public class NameListAdapter extends ArrayAdapter<NameListItem> {
 		 * 
 		 * Therefore, i refers to the current Item object.
 		 */
+
+		if (mSelection.get(position) != null) {
+			view.setBackgroundResource(R.color.list_item_long_press); // this is
+																		// a
+																		// selected
+																		// position
+																		// so
+																		// make
+																		// it
+																		// dark
+																		// bluew
+		} else {
+			view.setBackgroundResource(android.R.color.transparent);
+		}
+
 		NameListItem i = objects.get(position);
 
 		if (i != null) {
 
-			TextView name = (TextView) view.findViewById(R.id.nameText);
-			TextView owesWho = (TextView) view.findViewById(R.id.owingText);
-			TextView balance = (TextView) view.findViewById(R.id.balanceText);
-
 			// Check to see if each individual name is null
-			if (name != null) {
-				name.setText(i.getName());
+			if (holder.name != null) {
+				holder.name.setText(i.getName());
 			}
 
 			// Manage what happens with the balance
-			if (balance != null) {
-				
+			if (holder.balance != null) {
 
 				if (i.getBalance() < 0) {
-					owesWho.setText("Is Owed: ");
-					balance.setText("$" + Long.toString(Math.abs(i.getBalance())));
+					holder.owesWho.setText("Is Owed");
+					holder.balance.setText("$"
+							+ FormatDoubleToString(Math.abs(i.getBalance())));
 
 				} else if (i.getBalance() > 0) {
 
-					owesWho.setText("Owes You: ");
-					balance.setText("$" + Long.toString(Math.abs(i.getBalance())));
+					holder.owesWho.setText("Owes You");
+					holder.balance.setText("$"
+							+ FormatDoubleToString(Math.abs(i.getBalance())));
 
 				} else {
 
-					owesWho.setText(R.string.no_balance);
-					balance.setText("");
+					holder.owesWho.setText(R.string.no_balance);
+					holder.balance.setText("");
 				}
 			}
 
@@ -90,4 +164,10 @@ public class NameListAdapter extends ArrayAdapter<NameListItem> {
 
 	}
 
+	public static String FormatDoubleToString(double d) {
+		if (d == (int) d)
+			return String.format("%d", (int) d);
+		else
+			return String.format("%.2f", d);
+	}
 }
