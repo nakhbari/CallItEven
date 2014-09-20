@@ -168,6 +168,6 @@ public class NameListAdapter extends ArrayAdapter<NameListItem> {
 		if (d == (int) d)
 			return String.format("%d", (int) d);
 		else
-			return String.format("%d", d);
+			return String.format("%.2f", d);
 	}
 }

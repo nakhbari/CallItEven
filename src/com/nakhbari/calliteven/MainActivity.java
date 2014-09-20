@@ -29,12 +29,11 @@ public class MainActivity extends ActionBarActivity implements
 		NameListFragment.NameListCommunicator,
 		NameDialogFragment.NameDialogCommunicator,
 		EntryListFragment.EntryListCommunicator,
-		EntryDialogFragment.EntryDialogCommunicator {
+		EntryListDetailsFragment.EntryDetailsCommunicator {
 
 	private ArrayList<NameListItem> m_nameEntry = new ArrayList<NameListItem>();
 
 	private FragmentManager fm = getSupportFragmentManager();
-	private FragmentTransaction ft = fm.beginTransaction();
 	private NameListFragment nameListFragment = new NameListFragment();
 	private EntryListFragment entryListFragment = new EntryListFragment();
 
@@ -42,6 +41,8 @@ public class MainActivity extends ActionBarActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		FragmentTransaction ft = fm.beginTransaction();
 
 		if (savedInstanceState == null) {
 			ft.add(R.id.idFragment, nameListFragment, "name_list_tag");
@@ -120,9 +121,8 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public void NameListItemClicked(int position) {
-		// a Name was clicked, so move to the detail fragment
+		// a Name was clicked, so move to the detail fragment\
 		FragmentTransaction ft = fm.beginTransaction();
-
 		ft.setCustomAnimations(R.animator.enter_from_right,
 				R.animator.exit_to_left, R.animator.enter_from_left,
 				R.animator.exit_to_right);
@@ -136,6 +136,7 @@ public class MainActivity extends ActionBarActivity implements
 		// so the detail fragment can navigate back
 		final ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setTitle(m_nameEntry.get(position).getName());
 
 	}
 
@@ -207,10 +208,16 @@ public class MainActivity extends ActionBarActivity implements
 		// The Add New entry actionbar item was clicked so we need
 		// to open the dialog which the user can put in the details
 		// of the new entry
-		EntryDialogFragment newDialogFragment = new EntryDialogFragment();
-		newDialogFragment.SetEntryListItem(new EntryListItem(), namePosition,
-				-1);
-		newDialogFragment.show(fm, "EntryDialog");
+		FragmentTransaction ft = fm.beginTransaction();
+		EntryListDetailsFragment newEntryDetailsFragment = new EntryListDetailsFragment();
+		newEntryDetailsFragment.SetEntryListItem(new EntryListItem(),
+				namePosition, -1);
+
+		ft.setCustomAnimations(R.animator.enter_from_right,
+				R.animator.exit_to_left, R.animator.enter_from_left,
+				R.animator.exit_to_right);
+		ft.replace(R.id.idFragment, newEntryDetailsFragment);
+		ft.addToBackStack(null).commit();
 
 	}
 
@@ -229,13 +236,18 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public void EditEntryItem(int namePosition, int entryPosition) {
+		FragmentTransaction ft = fm.beginTransaction();
 		// Open Dialog so a new entry item can be added to the list
-		EntryDialogFragment newDialogFragment = new EntryDialogFragment();
-
-		newDialogFragment.SetEntryListItem(m_nameEntry.get(namePosition)
+		EntryListDetailsFragment newEntryDetailsFragment = new EntryListDetailsFragment();
+		newEntryDetailsFragment.SetEntryListItem(m_nameEntry.get(namePosition)
 				.getEntryArray().get(entryPosition), namePosition,
 				entryPosition);
-		newDialogFragment.show(fm, "EntryDialog");
+
+		ft.setCustomAnimations(R.animator.enter_from_right,
+				R.animator.exit_to_left, R.animator.enter_from_left,
+				R.animator.exit_to_right);
+		ft.replace(R.id.idFragment, newEntryDetailsFragment);
+		ft.addToBackStack(null).commit();
 
 	}
 
@@ -256,8 +268,8 @@ public class MainActivity extends ActionBarActivity implements
 		Collections.sort(m_nameEntry.get(namePosition).getEntryArray(),
 				new Comparator<EntryListItem>() {
 					public int compare(EntryListItem item1, EntryListItem item2) {
-						return (item1.getCalendar().getTime().compareTo(item2
-								.getCalendar().getTime()));
+						return (item1.getCurrentDate().getTime().compareTo(item2
+								.getCurrentDate().getTime()));
 					}
 				});
 
@@ -307,51 +319,51 @@ public class MainActivity extends ActionBarActivity implements
 
 			final int position = checkedItems.keyAt(i);
 
-//			int positionOnScreen = position
-//					- listView.getFirstVisiblePosition();
-//
-//			// check if the item is visible
-//			if (positionOnScreen >= 0
-//					&& positionOnScreen < listView.getChildCount()) {
-//				// if the item is visible, then animate a fadeout
-//				final View view = listView.getChildAt(positionOnScreen);
-//				view.animate().alpha(0).setDuration(300)
-//						.withEndAction(new Runnable() {
-//
-//							@Override
-//							public void run() {
-//								// TODO Auto-generated method stub
-//								view.setAlpha(1);
-//
-//								if (nameListPosition == -1) {
-//
-//									m_nameEntry.remove(position);
-//									UpdateNameListFragment();
-//								} else {
-//									m_nameEntry.get(nameListPosition)
-//											.getEntryArray().remove(position);
-//									UpdateEntryListFragment(nameListPosition,
-//											true);
-//								}
-//							}
-//
-//						}).start();
-//			} else {
-//				listView.postDelayed(new Runnable() {
-//					@Override
-//					public void run() {
-//						if (nameListPosition == -1) {
-//
-//							m_nameEntry.remove(position);
-//							UpdateNameListFragment();
-//						} else {
-//							m_nameEntry.get(nameListPosition).getEntryArray()
-//									.remove(position);
-//							UpdateEntryListFragment(nameListPosition, true);
-//						}
-//					}
-//				}, 350);
-//			}
+			// int positionOnScreen = position
+			// - listView.getFirstVisiblePosition();
+			//
+			// // check if the item is visible
+			// if (positionOnScreen >= 0
+			// && positionOnScreen < listView.getChildCount()) {
+			// // if the item is visible, then animate a fadeout
+			// final View view = listView.getChildAt(positionOnScreen);
+			// view.animate().alpha(0).setDuration(300)
+			// .withEndAction(new Runnable() {
+			//
+			// @Override
+			// public void run() {
+			// // TODO Auto-generated method stub
+			// view.setAlpha(1);
+			//
+			// if (nameListPosition == -1) {
+			//
+			// m_nameEntry.remove(position);
+			// UpdateNameListFragment();
+			// } else {
+			// m_nameEntry.get(nameListPosition)
+			// .getEntryArray().remove(position);
+			// UpdateEntryListFragment(nameListPosition,
+			// true);
+			// }
+			// }
+			//
+			// }).start();
+			// } else {
+			// listView.postDelayed(new Runnable() {
+			// @Override
+			// public void run() {
+			// if (nameListPosition == -1) {
+			//
+			// m_nameEntry.remove(position);
+			// UpdateNameListFragment();
+			// } else {
+			// m_nameEntry.get(nameListPosition).getEntryArray()
+			// .remove(position);
+			// UpdateEntryListFragment(nameListPosition, true);
+			// }
+			// }
+			// }, 350);
+			// }
 			if (nameListPosition == -1) {
 
 				m_nameEntry.remove(position);

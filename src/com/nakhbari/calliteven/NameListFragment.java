@@ -31,6 +31,13 @@ public class NameListFragment extends ListFragment {
 	}
 
 	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		getActivity().getActionBar().setTitle(R.string.app_name);
+	}
+
+	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onViewCreated(view, savedInstanceState);

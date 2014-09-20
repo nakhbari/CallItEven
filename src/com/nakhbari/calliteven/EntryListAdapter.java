@@ -67,7 +67,8 @@ public class EntryListAdapter extends ArrayAdapter<EntryListItem> {
 	static class ViewHolder {
 		TextView title;
 		TextView price;
-		TextView date;
+		TextView currentDate;
+		TextView dueDate;
 		TextView whoPaid;
 		int lastPosition;
 	}
@@ -92,7 +93,10 @@ public class EntryListAdapter extends ArrayAdapter<EntryListItem> {
 
 			holder.title = (TextView) view.findViewById(R.id.entryTitle);
 			holder.price = (TextView) view.findViewById(R.id.entryPrice);
-			holder.date = (TextView) view.findViewById(R.id.entryDate);
+			holder.currentDate = (TextView) view
+					.findViewById(R.id.entryListCurrentDate);
+			holder.dueDate = (TextView) view
+					.findViewById(R.id.entryListDueDate);
 			holder.whoPaid = (TextView) view.findViewById(R.id.tvWhoPaidEntry);
 
 			view.setTag(holder);
@@ -156,23 +160,30 @@ public class EntryListAdapter extends ArrayAdapter<EntryListItem> {
 
 			}
 
-			if (holder.date != null) {
-				holder.date.setText((dateFormat.format(entryItem.getCalendar()
-						.getTime()).toString()));
+			if (holder.currentDate != null) {
+				holder.currentDate.setText("On: "
+						+ (dateFormat.format(entryItem.getCurrentDate()
+								.getTime()).toString()));
 
 			}
-			
-			// Check to see if the item has any monetary value or is it 
+			if (holder.dueDate != null) {
+				if (entryItem.getDueDate() != null) {
+					holder.dueDate.setVisibility(View.VISIBLE);
+					holder.dueDate.setText("Due: "
+							+ (dateFormat.format(entryItem.getDueDate()
+									.getTime()).toString()));
+				} else {
+					holder.dueDate.setVisibility(View.GONE);
+				}
+
+			}
+			// Check to see if the item has any monetary value or is it
 			// just an item
-			if(entryItem.isItemMonetary())
-			{
+			if (entryItem.isItemMonetary()) {
 				holder.price.setVisibility(View.VISIBLE);
-				holder.whoPaid.setVisibility(View.VISIBLE);
-			}else{
-				holder.price.setVisibility(View.INVISIBLE);
-				holder.whoPaid.setVisibility(View.INVISIBLE);
+			} else {
+				holder.price.setVisibility(View.GONE);
 			}
-
 		}
 
 		// Return the view to the activity
@@ -184,6 +195,6 @@ public class EntryListAdapter extends ArrayAdapter<EntryListItem> {
 		if (d == (int) d)
 			return String.format("%d", (int) d);
 		else
-			return String.format("%d", d);
+			return String.format("%.2f", d);
 	}
 }

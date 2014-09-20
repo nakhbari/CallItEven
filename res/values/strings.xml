@@ -10,8 +10,8 @@
     <string name="find_contact">Find Contact</string>
 
     <string-array name="who_paid_array">
-        <item>You Paid</item>
-        <item>They Paid</item>
+        <item>You Lent Them</item>
+        <item>They Lent You</item>
     </string-array>
 
 </resources>
