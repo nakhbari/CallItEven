@@ -29,7 +29,7 @@ public class MainActivity extends ActionBarActivity implements
 		NameListFragment.NameListCommunicator,
 		NameDialogFragment.NameDialogCommunicator,
 		EntryListFragment.EntryListCommunicator,
-		EntryListDetailsFragment.EntryDetailsCommunicator {
+		EntryListDetailsFragment.EntryListDetailsCommunicator {
 
 	private ArrayList<NameListItem> m_nameEntry = new ArrayList<NameListItem>();
 

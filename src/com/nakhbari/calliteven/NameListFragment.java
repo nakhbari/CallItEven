@@ -165,7 +165,7 @@ public class NameListFragment extends ListFragment {
 	public void SetNameListFragment(ArrayList<NameListItem> array) {
 		m_nameEntry.clear();
 		m_nameEntry.addAll(array);
-		if (m_nameEntry.size() != 0) {
+		if (m_Adapter != null) {
 
 			m_Adapter.notifyDataSetChanged();
 		}
