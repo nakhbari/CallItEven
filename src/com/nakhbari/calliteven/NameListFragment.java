@@ -74,10 +74,10 @@ public class NameListFragment extends ListFragment {
 			@Override
 			public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
 				if (nr == 1) {
-					menu.findItem(R.id.item_edit).setVisible(true);
+					menu.findItem(R.id.name_item_edit).setVisible(true);
 				} else {
 
-					menu.findItem(R.id.item_edit).setVisible(false);
+					menu.findItem(R.id.name_item_edit).setVisible(false);
 				}
 				return false;
 			}
@@ -96,7 +96,7 @@ public class NameListFragment extends ListFragment {
 				// TODO Auto-generated method stub
 
 				nr = 0;
-				getActivity().getMenuInflater().inflate(R.menu.contextual_menu,
+				getActivity().getMenuInflater().inflate(R.menu.name_list_contextual_menu,
 						menu);
 
 				// Hide Add Button
@@ -109,7 +109,7 @@ public class NameListFragment extends ListFragment {
 				// TODO Auto-generated method stub
 				switch (item.getItemId()) {
 
-				case R.id.item_delete:
+				case R.id.name_item_delete:
 					nr = 0;
 					activityCommunicator
 							.RemoveCheckedNameListItems(getListView());
@@ -117,7 +117,7 @@ public class NameListFragment extends ListFragment {
 					mode.finish();
 					break;
 
-				case R.id.item_edit:
+				case R.id.name_item_edit:
 					int pos = m_Adapter.getCurrentCheckedPosition();
 					if (pos >= 0) {
 

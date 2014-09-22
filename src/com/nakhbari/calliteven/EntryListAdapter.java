@@ -155,7 +155,7 @@ public class EntryListAdapter extends ArrayAdapter<EntryListItem> {
 					holder.whoPaid.setText(arrayWhoPaid[1]);
 				}
 
-				holder.price.setText("$"
+				holder.price.setText(entryItem.getCurrency()
 						+ FormatDoubleToString(Math.abs(entryItem.getPrice())));
 
 			}

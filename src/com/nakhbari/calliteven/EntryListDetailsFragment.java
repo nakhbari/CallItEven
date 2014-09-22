@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.util.Calendar;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
@@ -29,22 +32,24 @@ public class EntryListDetailsFragment extends Fragment implements
 		EditText etPrice;
 		Button bCurrentDateButton;
 		Button bDueDateButton;
+		Button bYes;
+		Button bCancel;
 		RadioButton rbIsMoneyItem;
 		Spinner spWhoPaid;
+		Spinner spCurrency;
 	}
 
 	EntryListDetailsCommunicator activityCommunicator;
 	private int m_namePosition = 0;
 	private int m_entryPosition = 0;
 	private EntryListItem m_entryItem;
-	private ViewHolder holder;
+	private ViewHolder holder = new ViewHolder();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_entry_details, null);
 
-		return view;
+		return inflater.inflate(R.layout.fragment_entry_details, null);
 	}
 
 	@Override
@@ -64,12 +69,14 @@ public class EntryListDetailsFragment extends Fragment implements
 				.setFilters(new InputFilter[] { new InputFilterPriceNumber(".") });
 		holder.spWhoPaid = (Spinner) view
 				.findViewById(R.id.entryDetailsWhoPaid);
+		holder.spCurrency = (Spinner) view
+				.findViewById(R.id.entryDetailsCurrency);
 		holder.rbIsMoneyItem = (RadioButton) view
 				.findViewById(R.id.entryDetailsMonetary);
 
 		// Find the yes and cancel buttons in the dialog
-		Button yesButton = (Button) view.findViewById(R.id.entryOK);
-		Button cancelButton = (Button) view.findViewById(R.id.entryCancel);
+		holder.bYes = (Button) view.findViewById(R.id.entryOK);
+		holder.bCancel = (Button) view.findViewById(R.id.entryCancel);
 		holder.bCurrentDateButton = (Button) view
 				.findViewById(R.id.entryDetailsCurrentDate);
 		holder.bDueDateButton = (Button) view
@@ -77,47 +84,79 @@ public class EntryListDetailsFragment extends Fragment implements
 
 		// Set the edit texts within the Dialog, if the entry item is filled out
 		if (m_entryItem != null && holder.etTitle != null
-				&& holder.etPrice != null && holder.bCurrentDateButton != null) {
-
-			holder.etTitle.requestFocus();
-			holder.etTitle.requestFocusFromTouch();
+				&& holder.etPrice != null && holder.bCurrentDateButton != null
+				&& holder.rbIsMoneyItem != null
+				&& holder.bDueDateButton != null && holder.spWhoPaid != null) {
 
 			if (m_entryItem.getTitle() != "default") {
+
 				holder.etTitle.setText(m_entryItem.getTitle());
 				holder.etTitle.setSelection(m_entryItem.getTitle().length());
-				holder.etPrice.setText(Double.toString(m_entryItem.getPrice()));
 				holder.bCurrentDateButton
 						.setText(GetStringFromCalendar(m_entryItem
 								.getCurrentDate()));
-
-				holder.bDueDateButton.setText(GetStringFromCalendar(m_entryItem
-						.getDueDate()));
-
 			} else {
 
 				final Calendar calendar = Calendar.getInstance();
 				holder.bCurrentDateButton
 						.setText(GetStringFromCalendar(calendar));
+			}
+
+			holder.etPrice
+					.setText(FormatDoubleToString(m_entryItem.getPrice()));
+
+			if (m_entryItem.getDueDate() == null) {
+
 				holder.bDueDateButton.setText("No Date");
+			} else {
+
+				holder.bDueDateButton.setText(GetStringFromCalendar(m_entryItem
+						.getDueDate()));
 			}
 
 		}
 		// Listen for clicks
-		if (yesButton != null) {
+		if (holder.bYes != null) {
 
-			yesButton.setOnClickListener(this);
+			holder.bYes.setOnClickListener(this);
 		}
-		if (cancelButton != null) {
+		if (holder.bCancel != null) {
 
-			cancelButton.setOnClickListener(this);
+			holder.bCancel.setOnClickListener(this);
 		}
 		if (holder.bCurrentDateButton != null) {
 
 			holder.bCurrentDateButton.setOnClickListener(this);
-			if (holder.bDueDateButton != null) {
 
-				holder.bDueDateButton.setOnClickListener(this);
-			}
+		}
+		if (holder.bDueDateButton != null) {
+
+			holder.bDueDateButton.setOnClickListener(this);
+		}
+		if (holder.rbIsMoneyItem != null) {
+			holder.rbIsMoneyItem
+					.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+						@Override
+						public void onCheckedChanged(CompoundButton buttonView,
+								boolean isChecked) {
+							if (isChecked) {
+
+								// Item is a Monetary Value
+								holder.etPrice.setEnabled(true);
+								holder.etPrice.setTextColor(Color.BLACK);
+								holder.spCurrency.setEnabled(true);
+							} else {
+
+								// Item is am Object
+								holder.etPrice.setEnabled(false);
+								holder.etPrice.setTextColor(Color.LTGRAY);
+								holder.spCurrency.setEnabled(false);
+							}
+
+						}
+
+					});
 		}
 
 	}
@@ -164,20 +203,24 @@ public class EntryListDetailsFragment extends Fragment implements
 										.toString()));
 
 					}
-				}
 
-				m_entryItem.setItemMonetary(holder.rbIsMoneyItem.isChecked());
+					m_entryItem.setItemMonetary(holder.rbIsMoneyItem
+							.isChecked());
+					m_entryItem.setCurrency(holder.spCurrency.getSelectedItem()
+							.toString());
+				}
 
 				// Send data to the fragment
 				activityCommunicator.SendEntryItemData(m_entryItem,
 						m_namePosition, m_entryPosition);
 
-				getActivity().getFragmentManager().popBackStack();
+				getActivity().getSupportFragmentManager().popBackStack();
 			}
 
 			break;
 		case R.id.entryCancel:
-			getActivity().getFragmentManager().popBackStack();
+
+			getActivity().getSupportFragmentManager().popBackStack();
 			break;
 
 		case R.id.entryDetailsDueDate:
@@ -197,11 +240,11 @@ public class EntryListDetailsFragment extends Fragment implements
 		cal.setTimeInMillis(0);
 		cal.set(year, month, day);
 		if (datePickerDialog.getTag() == "Current DatePicker") {
-			
+
 			m_entryItem.setCurrentDate(cal);
 			holder.bCurrentDateButton.setText(GetStringFromCalendar(cal));
 		} else {
-			
+
 			m_entryItem.setDueDate(cal);
 			holder.bDueDateButton.setText(GetStringFromCalendar(cal));
 		}
@@ -214,6 +257,13 @@ public class EntryListDetailsFragment extends Fragment implements
 
 		result = dateFormat.format(cal.getTime());
 		return result;
+	}
+
+	public static String FormatDoubleToString(double d) {
+		if (d == (int) d)
+			return String.format("%d", (int) d);
+		else
+			return String.format("%.2f", d);
 	}
 
 	/** ----------------------- Activity Callbacks --------------------------- */

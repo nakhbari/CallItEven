@@ -67,12 +67,6 @@ public class EntryListFragment extends ListFragment {
 
 			@Override
 			public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-				if (nr == 1) {
-					menu.findItem(R.id.item_edit).setVisible(true);
-				} else {
-
-					menu.findItem(R.id.item_edit).setVisible(false);
-				}
 				return false;
 			}
 
@@ -90,7 +84,7 @@ public class EntryListFragment extends ListFragment {
 				// TODO Auto-generated method stub
 
 				nr = 0;
-				getActivity().getMenuInflater().inflate(R.menu.contextual_menu,
+				getActivity().getMenuInflater().inflate(R.menu.entry_list_contextual_menu,
 						menu);
 
 				// Hide Add Button
@@ -103,21 +97,10 @@ public class EntryListFragment extends ListFragment {
 				// TODO Auto-generated method stub
 				switch (item.getItemId()) {
 
-				case R.id.item_delete:
+				case R.id.entry_item_delete:
 					nr = 0;
 					activityCommunicator.RemoveCheckedEntryListItems(
 							getListView(), m_namePosition);
-					m_Adapter.clearSelection();
-					mode.finish();
-					break;
-
-				case R.id.item_edit:
-					int pos = m_Adapter.getCurrentCheckedPosition();
-					if (pos >= 0) {
-
-						activityCommunicator.EditEntryItem(m_namePosition, pos);
-					}
-
 					m_Adapter.clearSelection();
 					mode.finish();
 					break;
@@ -182,6 +165,13 @@ public class EntryListFragment extends ListFragment {
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
 		super.onPause();
+	}
+	
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id) {
+		super.onListItemClick(l, v, position, id);
+
+		activityCommunicator.EditEntryItem(m_namePosition, position);
 	}
 
 	/** ----------------------- Activity Functions ----------------- */

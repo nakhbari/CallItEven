@@ -13,5 +13,11 @@
         <item>You Lent Them</item>
         <item>They Lent You</item>
     </string-array>
-
+    <string-array name="currency_array">
+        <item>$</item>
+        <item>&#8364;</item>
+        <item>&#165;</item>
+        <item>&#163;</item>
+        <item>&#8355;</item>
+    </string-array>
 </resources>
