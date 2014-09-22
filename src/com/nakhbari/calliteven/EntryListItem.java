@@ -9,14 +9,14 @@ public class EntryListItem {
 	private Calendar m_CurrentDate;
 	private Calendar m_DueDate;
 	private boolean m_IsItemMonetary;
-	private String m_Currency;
+	private int m_CurrencyArrayPos;
 
 	public EntryListItem() {
 		m_Title = "default";
 		m_Price = 0.0;
 		m_CurrentDate = Calendar.getInstance();
 		m_DueDate = null;
-		m_Currency = "$";
+		m_CurrencyArrayPos = 0;
 		m_IsItemMonetary = true;
 	}
 
@@ -60,11 +60,11 @@ public class EntryListItem {
 		m_IsItemMonetary = isMonetary;
 	}
 
-	public void setCurrency(String cur) {
-		m_Currency = cur;
+	public void setCurrencyArrayPos(int curPos) {
+		m_CurrencyArrayPos = curPos;
 	}
 
-	public String getCurrency() {
-		return m_Currency;
+	public int getCurrencyArrayPos() {
+		return m_CurrencyArrayPos;
 	}
 }

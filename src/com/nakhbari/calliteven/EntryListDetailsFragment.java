@@ -100,6 +100,7 @@ public class EntryListDetailsFragment extends Fragment implements
 				final Calendar calendar = Calendar.getInstance();
 				holder.bCurrentDateButton
 						.setText(GetStringFromCalendar(calendar));
+				holder.spCurrency.setSelection(m_entryItem.getCurrencyArrayPos());
 			}
 
 			holder.etPrice
@@ -206,8 +207,7 @@ public class EntryListDetailsFragment extends Fragment implements
 
 					m_entryItem.setItemMonetary(holder.rbIsMoneyItem
 							.isChecked());
-					m_entryItem.setCurrency(holder.spCurrency.getSelectedItem()
-							.toString());
+					m_entryItem.setCurrencyArrayPos(holder.spCurrency.getSelectedItemPosition());
 				}
 
 				// Send data to the fragment
