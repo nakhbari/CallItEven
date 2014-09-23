@@ -35,6 +35,7 @@ public class EntryListDetailsFragment extends Fragment implements
 		Button bYes;
 		Button bCancel;
 		RadioButton rbIsMoneyItem;
+		RadioButton rbIsObjectItem;
 		Spinner spWhoPaid;
 		Spinner spCurrency;
 	}
@@ -55,13 +56,13 @@ public class EntryListDetailsFragment extends Fragment implements
 	@Override
 	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
-		initializeDialog(view);
+		initializeDetails(view);
 		super.onViewCreated(view, savedInstanceState);
 	}
 
 	/** ----------------------- Functions -------------------------------------- */
 
-	private void initializeDialog(View view) {
+	private void initializeDetails(View view) {
 
 		holder.etTitle = (EditText) view.findViewById(R.id.entryDetailsTitle);
 		holder.etPrice = (EditText) view.findViewById(R.id.entryDetailsPrice);
@@ -73,6 +74,8 @@ public class EntryListDetailsFragment extends Fragment implements
 				.findViewById(R.id.entryDetailsCurrency);
 		holder.rbIsMoneyItem = (RadioButton) view
 				.findViewById(R.id.entryDetailsMonetary);
+		holder.rbIsObjectItem = (RadioButton) view
+				.findViewById(R.id.entryDetailsObject);
 
 		// Find the yes and cancel buttons in the dialog
 		holder.bYes = (Button) view.findViewById(R.id.entryOK);
@@ -95,16 +98,26 @@ public class EntryListDetailsFragment extends Fragment implements
 				holder.bCurrentDateButton
 						.setText(GetStringFromCalendar(m_entryItem
 								.getCurrentDate()));
+				holder.spCurrency.setSelection(m_entryItem
+						.getCurrencyArrayPos());
+				holder.etPrice.setText(FormatDoubleToString(m_entryItem
+						.getPrice()));
+
+				if (!m_entryItem.isItemMonetary()) {
+					// Item is am Object
+					holder.etPrice.setEnabled(false);
+					holder.etPrice.setTextColor(Color.LTGRAY);
+					holder.spCurrency.setEnabled(false);
+					holder.rbIsMoneyItem.setChecked(false);
+					holder.rbIsObjectItem.setChecked(true);
+				}
 			} else {
 
 				final Calendar calendar = Calendar.getInstance();
 				holder.bCurrentDateButton
 						.setText(GetStringFromCalendar(calendar));
-				holder.spCurrency.setSelection(m_entryItem.getCurrencyArrayPos());
-			}
 
-			holder.etPrice
-					.setText(FormatDoubleToString(m_entryItem.getPrice()));
+			}
 
 			if (m_entryItem.getDueDate() == null) {
 
@@ -180,16 +193,18 @@ public class EntryListDetailsFragment extends Fragment implements
 				Toast.makeText(getActivity(), "Enter Title", Toast.LENGTH_SHORT)
 						.show();
 			} else if (holder.rbIsMoneyItem.isChecked()
-					&& holder.etPrice.getText().toString().length() == 0) {
+					&& holder.etPrice.getText().toString().isEmpty()) {
 
-				Toast.makeText(getActivity(), "Enter Price", Toast.LENGTH_SHORT)
-						.show();
+				Toast.makeText(getActivity(), "Enter Amount",
+						Toast.LENGTH_SHORT).show();
 			} else {
 				// fill in the entrylistitem with the dialog data
 				m_entryItem
 						.setTitle(holder.etTitle.getText().toString().trim());
 
 				// If there is a monetary value, then set it in the entry item
+				m_entryItem.setItemMonetary(holder.rbIsMoneyItem.isChecked());
+
 				if (holder.rbIsMoneyItem.isChecked()) {
 					if (holder.spWhoPaid.getSelectedItemPosition() == 0) {
 
@@ -205,9 +220,8 @@ public class EntryListDetailsFragment extends Fragment implements
 
 					}
 
-					m_entryItem.setItemMonetary(holder.rbIsMoneyItem
-							.isChecked());
-					m_entryItem.setCurrencyArrayPos(holder.spCurrency.getSelectedItemPosition());
+					m_entryItem.setCurrencyArrayPos(holder.spCurrency
+							.getSelectedItemPosition());
 				}
 
 				// Send data to the fragment

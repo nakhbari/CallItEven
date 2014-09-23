@@ -5,12 +5,14 @@ import java.util.HashMap;
 import java.util.Set;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class NameListAdapter extends ArrayAdapter<NameListItem> {
@@ -63,6 +65,9 @@ public class NameListAdapter extends ArrayAdapter<NameListItem> {
 		TextView name;
 		TextView owesWho;
 		TextView balance;
+		TextView latestEntries;
+		TextView divLine2;
+		ImageView circleImage;
 		int lastPosition;
 	}
 
@@ -85,8 +90,22 @@ public class NameListAdapter extends ArrayAdapter<NameListItem> {
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			view = inflater.inflate(R.layout.row_name_list, parent, false);
 			holder.name = (TextView) view.findViewById(R.id.nameText);
-			holder.owesWho = (TextView) view.findViewById(R.id.owingText);
-			holder.balance = (TextView) view.findViewById(R.id.balanceText);
+			holder.owesWho = (TextView) view.findViewById(R.id.tvOwingText);
+			holder.balance = (TextView) view.findViewById(R.id.tvBalanceText);
+			holder.latestEntries = (TextView) view
+					.findViewById(R.id.tvLatestItems);
+			holder.divLine2 = (TextView) view.findViewById(R.id.divLine2);
+			holder.circleImage = (ImageView) view
+					.findViewById(R.id.nameItemCircle);
+			
+			//set fonts
+			Typeface tf = Typeface.createFromAsset(getContext().getAssets(),
+					"fonts/Roboto-Light.ttf");
+			holder.name.setTypeface(tf);
+			holder.latestEntries.setTypeface(tf);
+			holder.balance.setTypeface(tf);
+			holder.owesWho.setTypeface(tf);
+			
 			view.setTag(holder);
 		} else {
 			holder = (ViewHolder) view.getTag();
@@ -140,21 +159,55 @@ public class NameListAdapter extends ArrayAdapter<NameListItem> {
 			if (holder.balance != null) {
 
 				if (i.getBalance() < 0) {
+
+					holder.balance.setVisibility(View.VISIBLE);
 					holder.owesWho.setText("Is Owed");
 					holder.balance.setText("$"
 							+ FormatDoubleToString(Math.abs(i.getBalance())));
 
 				} else if (i.getBalance() > 0) {
 
+					holder.balance.setVisibility(View.VISIBLE);
 					holder.owesWho.setText("Owes You");
 					holder.balance.setText("$"
 							+ FormatDoubleToString(Math.abs(i.getBalance())));
 
 				} else {
+					// No Money Owed
+					holder.balance.setVisibility(View.GONE);
 
-					holder.owesWho.setText(R.string.no_balance);
-					holder.balance.setText("");
+					if (i.getListOfLatestEntries().isEmpty()) {
+						// Nothing is owed
+
+						holder.owesWho.setText(R.string.no_balance);
+					} else {
+						holder.owesWho.setText("Object Lent");
+					}
+
 				}
+			}
+
+			// Manage Latest Items
+			if (i.getListOfLatestEntries().isEmpty()) {
+
+				holder.latestEntries.setVisibility(View.GONE);
+				holder.divLine2.setVisibility(View.GONE);
+				holder.owesWho.setTextColor(getContext().getResources()
+						.getColor(R.color.green));
+				holder.circleImage.setImageResource(R.drawable.ic_check);
+				holder.circleImage
+						.setBackgroundResource(R.drawable.green_circle);
+			} else {
+				holder.latestEntries.setText(i.getListOfLatestEntries()
+						.getList());
+				holder.latestEntries.setVisibility(View.VISIBLE);
+				holder.divLine2.setVisibility(View.VISIBLE);
+				holder.owesWho.setTextColor(getContext().getResources()
+						.getColor(R.color.actionbar_background));
+				holder.circleImage
+						.setImageResource(R.drawable.ic_arrow_forward);
+				holder.circleImage
+						.setBackgroundResource(R.drawable.blue_circle);
 			}
 
 		}

@@ -8,7 +8,7 @@ public class InputFilterPriceNumber implements InputFilter {
 	private String testRegex;
 
 	public InputFilterPriceNumber(String decimalSep) {
-		testRegex = "(^\\d{0,7}$)|(^\\d{0,7}\\.\\d{0,2}$)";
+		testRegex = "(^[1-9]\\d{0,7}$)|(^[1-9]\\d{0,7}\\.\\d{0,2}$)";
 	}
 
 	@Override

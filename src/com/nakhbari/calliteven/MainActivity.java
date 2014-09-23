@@ -268,12 +268,29 @@ public class MainActivity extends ActionBarActivity implements
 		Collections.sort(m_nameEntry.get(namePosition).getEntryArray(),
 				new Comparator<EntryListItem>() {
 					public int compare(EntryListItem item1, EntryListItem item2) {
-						return (item1.getCurrentDate().getTime().compareTo(item2
-								.getCurrentDate().getTime()));
+						return (item1.getCurrentDate().getTime()
+								.compareTo(item2.getCurrentDate().getTime()));
 					}
 				});
 
+		RecalculateLatestItems(namePosition);
 		UpdateEntryListFragment(namePosition, true);
+
+	}
+
+	private void RecalculateLatestItems(int namePosition) {
+		ArrayList<EntryListItem> entries = m_nameEntry.get(namePosition)
+				.getEntryArray();
+		int listSize = m_nameEntry.get(namePosition).getListOfLatestEntries()
+				.getMaxLatestItemSize();
+		String[] strArray = new String[listSize];
+
+		for (int i = 0; i < entries.size() && i < listSize; i++) {
+			strArray[i] = entries.get(i).getTitle();
+		}
+
+		m_nameEntry.get(namePosition).getListOfLatestEntries()
+				.recalculateNewList(strArray);
 
 	}
 
@@ -319,51 +336,6 @@ public class MainActivity extends ActionBarActivity implements
 
 			final int position = checkedItems.keyAt(i);
 
-			// int positionOnScreen = position
-			// - listView.getFirstVisiblePosition();
-			//
-			// // check if the item is visible
-			// if (positionOnScreen >= 0
-			// && positionOnScreen < listView.getChildCount()) {
-			// // if the item is visible, then animate a fadeout
-			// final View view = listView.getChildAt(positionOnScreen);
-			// view.animate().alpha(0).setDuration(300)
-			// .withEndAction(new Runnable() {
-			//
-			// @Override
-			// public void run() {
-			// // TODO Auto-generated method stub
-			// view.setAlpha(1);
-			//
-			// if (nameListPosition == -1) {
-			//
-			// m_nameEntry.remove(position);
-			// UpdateNameListFragment();
-			// } else {
-			// m_nameEntry.get(nameListPosition)
-			// .getEntryArray().remove(position);
-			// UpdateEntryListFragment(nameListPosition,
-			// true);
-			// }
-			// }
-			//
-			// }).start();
-			// } else {
-			// listView.postDelayed(new Runnable() {
-			// @Override
-			// public void run() {
-			// if (nameListPosition == -1) {
-			//
-			// m_nameEntry.remove(position);
-			// UpdateNameListFragment();
-			// } else {
-			// m_nameEntry.get(nameListPosition).getEntryArray()
-			// .remove(position);
-			// UpdateEntryListFragment(nameListPosition, true);
-			// }
-			// }
-			// }, 350);
-			// }
 			if (nameListPosition == -1) {
 
 				m_nameEntry.remove(position);
@@ -371,6 +343,7 @@ public class MainActivity extends ActionBarActivity implements
 			} else {
 				m_nameEntry.get(nameListPosition).getEntryArray()
 						.remove(position);
+				RecalculateLatestItems(nameListPosition);
 				UpdateEntryListFragment(nameListPosition, true);
 			}
 		}

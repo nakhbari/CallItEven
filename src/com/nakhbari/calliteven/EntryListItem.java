@@ -10,6 +10,7 @@ public class EntryListItem {
 	private Calendar m_DueDate;
 	private boolean m_IsItemMonetary;
 	private int m_CurrencyArrayPos;
+	private boolean m_DidYouLend;
 
 	public EntryListItem() {
 		m_Title = "default";
@@ -18,6 +19,7 @@ public class EntryListItem {
 		m_DueDate = null;
 		m_CurrencyArrayPos = 0;
 		m_IsItemMonetary = true;
+		m_DidYouLend = true;
 	}
 
 	public String getTitle() {
@@ -66,5 +68,14 @@ public class EntryListItem {
 
 	public int getCurrencyArrayPos() {
 		return m_CurrencyArrayPos;
+	}
+
+	public boolean didYouLend() {
+		return m_DidYouLend;
+	}
+
+	public void youLent(boolean bool) {
+		m_DidYouLend = bool;
+
 	}
 }

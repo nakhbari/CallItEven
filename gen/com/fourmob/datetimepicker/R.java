@@ -136,7 +136,7 @@ public final class R {
 		public static final int abc_split_action_bar_is_narrow = 0x7f080002;
 	}
 	public static final class color {
-		public static final int abc_search_url_text_holo = 0x7f090017;
+		public static final int abc_search_url_text_holo = 0x7f09001a;
 		public static final int abc_search_url_text_normal = 0x7f090000;
 		public static final int abc_search_url_text_pressed = 0x7f090002;
 		public static final int abc_search_url_text_selected = 0x7f090001;
@@ -145,11 +145,11 @@ public final class R {
 		public static final int calendar_header = 0x7f09000b;
 		public static final int circle_background = 0x7f090004;
 		public static final int darker_blue = 0x7f090009;
-		public static final int date_picker_selector = 0x7f090018;
+		public static final int date_picker_selector = 0x7f09001b;
 		public static final int date_picker_text_normal = 0x7f09000a;
 		public static final int date_picker_view_animator = 0x7f09000c;
-		public static final int date_picker_year_selector = 0x7f090019;
-		public static final int done_text_color = 0x7f09001a;
+		public static final int date_picker_year_selector = 0x7f09001c;
+		public static final int done_text_color = 0x7f09001d;
 		public static final int done_text_color_disabled = 0x7f090007;
 		public static final int done_text_color_normal = 0x7f090006;
 		public static final int line_background = 0x7f090005;
@@ -315,11 +315,11 @@ public final class R {
 		public static final int action_mode_close_button = 0x7f07002d;
 		public static final int activity_chooser_view_content = 0x7f07002e;
 		public static final int always = 0x7f07000b;
-		public static final int ampm_hitspace = 0x7f07006b;
-		public static final int ampm_label = 0x7f07006c;
+		public static final int ampm_hitspace = 0x7f07006e;
+		public static final int ampm_label = 0x7f07006f;
 		public static final int animator = 0x7f070021;
 		public static final int beginning = 0x7f070011;
-		public static final int center_view = 0x7f070065;
+		public static final int center_view = 0x7f070068;
 		public static final int checkbox = 0x7f070036;
 		public static final int collapseActionView = 0x7f07000d;
 		public static final int date_picker_day = 0x7f07001f;
@@ -332,7 +332,7 @@ public final class R {
 		public static final int dialog = 0x7f07000e;
 		public static final int disableHome = 0x7f070008;
 		public static final int done = 0x7f07001a;
-		public static final int done_button = 0x7f07006f;
+		public static final int done_button = 0x7f070072;
 		public static final int dropdown = 0x7f07000f;
 		public static final int edit_query = 0x7f070039;
 		public static final int end = 0x7f070013;
@@ -340,16 +340,16 @@ public final class R {
 		public static final int expanded_menu = 0x7f070035;
 		public static final int home = 0x7f070014;
 		public static final int homeAsUp = 0x7f070005;
-		public static final int hour_space = 0x7f070066;
-		public static final int hours = 0x7f070068;
+		public static final int hour_space = 0x7f070069;
+		public static final int hours = 0x7f07006b;
 		public static final int icon = 0x7f070033;
 		public static final int ifRoom = 0x7f07000a;
 		public static final int image = 0x7f070030;
 		public static final int listMode = 0x7f070001;
 		public static final int list_item = 0x7f070032;
 		public static final int middle = 0x7f070012;
-		public static final int minutes = 0x7f07006a;
-		public static final int minutes_space = 0x7f070069;
+		public static final int minutes = 0x7f07006d;
+		public static final int minutes_space = 0x7f07006c;
 		public static final int month_text_view = 0x7f070022;
 		public static final int never = 0x7f070009;
 		public static final int none = 0x7f070010;
@@ -367,7 +367,7 @@ public final class R {
 		public static final int search_plate = 0x7f07003f;
 		public static final int search_src_text = 0x7f070040;
 		public static final int search_voice_btn = 0x7f070044;
-		public static final int separator = 0x7f070067;
+		public static final int separator = 0x7f07006a;
 		public static final int shortcut = 0x7f070037;
 		public static final int showCustom = 0x7f070007;
 		public static final int showHome = 0x7f070004;
@@ -375,8 +375,8 @@ public final class R {
 		public static final int split_action_bar = 0x7f070027;
 		public static final int submit_area = 0x7f070042;
 		public static final int tabMode = 0x7f070002;
-		public static final int time_picker = 0x7f07006e;
-		public static final int time_picker_dialog = 0x7f07006d;
+		public static final int time_picker = 0x7f070071;
+		public static final int time_picker_dialog = 0x7f070070;
 		public static final int title = 0x7f070034;
 		public static final int top_action_bar = 0x7f070029;
 		public static final int up = 0x7f07002a;

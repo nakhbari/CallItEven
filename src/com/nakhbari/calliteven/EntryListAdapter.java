@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Set;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,7 +99,16 @@ public class EntryListAdapter extends ArrayAdapter<EntryListItem> {
 			holder.dueDate = (TextView) view
 					.findViewById(R.id.entryListDueDate);
 			holder.whoPaid = (TextView) view.findViewById(R.id.tvWhoPaidEntry);
-
+			
+			//set fonts
+			Typeface tf = Typeface.createFromAsset(getContext().getAssets(),
+					"fonts/Roboto-Light.ttf");
+			holder.title.setTypeface(tf);
+			holder.price.setTypeface(tf);
+			holder.dueDate.setTypeface(tf);
+			holder.currentDate.setTypeface(tf);
+			holder.whoPaid.setTypeface(tf);
+			
 			view.setTag(holder);
 		} else {
 			holder = (ViewHolder) view.getTag();
