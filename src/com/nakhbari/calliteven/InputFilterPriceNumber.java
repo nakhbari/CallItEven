@@ -5,11 +5,7 @@ import android.text.Spanned;
 
 public class InputFilterPriceNumber implements InputFilter {
 
-	private String testRegex;
-
-	public InputFilterPriceNumber(String decimalSep) {
-		testRegex = "(^[1-9]\\d{0,7}$)|(^[1-9]\\d{0,7}\\.\\d{0,2}$)";
-	}
+	int beforeDecimal = 7, afterDecimal = 2;
 
 	@Override
 	public CharSequence filter(CharSequence source, int start, int end,
@@ -20,10 +16,22 @@ public class InputFilterPriceNumber implements InputFilter {
 		String r = d.substring(0, dstart) + s.substring(start, end)
 				+ d.substring(dend);
 
-		if (r.matches(testRegex)) {
-			return null;
+		if (r.equals(".")) {
+			return "0.";
+		} else if (r.equals("0")) {
+			return ""; // don't allow beginning with a 0
+		} else if (!r.contains(".")) {
+			// no decimal point placed yet
+			if (r.length() > beforeDecimal) {
+				return "";
+			}
 		} else {
-			return "";
+			r = r.substring(r.indexOf(".") + 1);
+			if (r.length() > afterDecimal) {
+				return "";
+			}
 		}
+
+		return null;
 	}
 }

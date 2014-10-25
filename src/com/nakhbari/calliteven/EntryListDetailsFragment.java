@@ -3,6 +3,7 @@ package com.nakhbari.calliteven;
 import java.text.DateFormat;
 import java.util.Calendar;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -59,6 +61,46 @@ public class EntryListDetailsFragment extends Fragment implements
 		initializeDetails(view);
 		super.onViewCreated(view, savedInstanceState);
 	}
+	
+	/** ----------------------- Action Bar ------------------------- */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+
+		// Notify the fragment that there is an option menu to inflate
+		setHasOptionsMenu(true);
+		super.onCreate(savedInstanceState);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// This function will catch when the actionbar button have been clicked
+		switch (item.getItemId()) {
+
+		case android.R.id.home:
+			activityCommunicator.NavigateBack();
+			break;
+		}
+
+		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onPause() {
+
+		ActionBar actionBar = getActivity().getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(false);
+
+		super.onPause();
+	}
+
+	@Override
+	public void onResume() {
+
+		ActionBar actionBar = getActivity().getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+
+		super.onPause();
+	}
 
 	/** ----------------------- Functions -------------------------------------- */
 
@@ -67,7 +109,7 @@ public class EntryListDetailsFragment extends Fragment implements
 		holder.etTitle = (EditText) view.findViewById(R.id.entryDetailsTitle);
 		holder.etPrice = (EditText) view.findViewById(R.id.entryDetailsPrice);
 		holder.etPrice
-				.setFilters(new InputFilter[] { new InputFilterPriceNumber(".") });
+				.setFilters(new InputFilter[] { new InputFilterPriceNumber() });
 		holder.spWhoPaid = (Spinner) view
 				.findViewById(R.id.entryDetailsWhoPaid);
 		holder.spCurrency = (Spinner) view
@@ -222,6 +264,10 @@ public class EntryListDetailsFragment extends Fragment implements
 
 					m_entryItem.setCurrencyArrayPos(holder.spCurrency
 							.getSelectedItemPosition());
+				}else{
+					
+					m_entryItem.setPrice(0.0);
+					m_entryItem.setCurrencyArrayPos(0);
 				}
 
 				// Send data to the fragment
@@ -306,6 +352,7 @@ public class EntryListDetailsFragment extends Fragment implements
 	public interface EntryListDetailsCommunicator {
 		public void SendEntryItemData(EntryListItem item, int namePosition,
 				int entryPosition);
+		public void NavigateBack();
 	}
 
 }

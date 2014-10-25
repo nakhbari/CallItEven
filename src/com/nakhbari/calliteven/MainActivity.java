@@ -251,7 +251,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	}
 
-	/** ----------------------- EntryDialogFragment Callbacks ----------------- */
+	/** ----------------------- EntryDetailFragment Callbacks ----------------- */
 
 	@Override
 	public void SendEntryItemData(EntryListItem item, int namePosition,
@@ -294,18 +294,30 @@ public class MainActivity extends ActionBarActivity implements
 
 	}
 
+	@Override
+	public void NavigateBack() {
+		// Pop back to the last fragment
+		fm.popBackStack();
+	}
+
 	/** ----------------------------- Functions ------------------------------ */
 	private void CalculateBalance(int namePosition) {
 		// Calculate how much the person is owed, from the sum of entries
-		double balanceSum = 0.0;
+		double balanceSum[] = { 0.0, 0.0, 0.0, 0.0, 0.0 };
 
 		for (int i = 0; i < m_nameEntry.get(namePosition).getEntryArray()
 				.size(); i++) {
-			balanceSum += m_nameEntry.get(namePosition).getEntryArray().get(i)
-					.getPrice();
+
+			balanceSum[m_nameEntry.get(namePosition).getEntryArray().get(i)
+					.getCurrencyArrayPos()] += m_nameEntry.get(namePosition)
+					.getEntryArray().get(i).getPrice();
 		}
 
-		m_nameEntry.get(namePosition).setBalance(balanceSum);
+		m_nameEntry.get(namePosition).setBalanceDollar(balanceSum[0]);
+		m_nameEntry.get(namePosition).setBalanceEuro(balanceSum[1]);
+		m_nameEntry.get(namePosition).setBalanceYen(balanceSum[2]);
+		m_nameEntry.get(namePosition).setBalancePound(balanceSum[3]);
+		m_nameEntry.get(namePosition).setBalanceFranc(balanceSum[4]);
 	}
 
 	private void SaveDataStructure() {
